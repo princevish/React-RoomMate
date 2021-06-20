@@ -13,8 +13,11 @@ import Favorite from './components/Favorite';
 import Profile from './components/Profile';
 import Chat from './components/Chat';
 import Container from '@material-ui/core/Container'
-import { makeStyles } from '@material-ui/core/styles';
-
+import { makeStyles,ThemeProvider } from '@material-ui/core/styles';
+import { CssBaseline } from '@material-ui/core';
+import Theme from './components/Theme';
+import Signin from "./components/Signin";
+import Signup from "./components/Signup";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -25,8 +28,12 @@ const useStyles = makeStyles((theme) => ({
 function App() {
  const classes=useStyles()
   return (
+    <ThemeProvider theme={Theme}>
+    <CssBaseline/>
+    
     <Router>
     <Navbar/>
+   
       <Container className={classes.root} >
       <Switch>
           <Route exact path="/" >
@@ -41,17 +48,25 @@ function App() {
           <Route path="/favorite">
             <Favorite />
           </Route>
-          <Route path="/profile">
+          <Route exact path="/profile">
             <Profile />
           </Route>
           <Route path="/chat">
             <Chat />
           </Route>
+          <Route path="/signin">
+            <Signin/>
+          </Route>
+          <Route path="/signup">
+            <Signup/>
+          </Route>
         </Switch>
         
       </Container>
-    <NavBottom/>
+  <NavBottom/>
+    
     </Router>
+    </ThemeProvider>
   );
 }
 

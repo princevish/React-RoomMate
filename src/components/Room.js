@@ -1,16 +1,17 @@
-import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import { CardContent 
-  , CardMedia,Grid,
-  Paper,
-  CardActions,
-  Card,
-  CardHeader,
-  Typography,
-  Avatar,
-  IconButton,
-  CssBaseline,
-  CardActionArea,
+import React, {useEffect, useState} from 'react';
+import {makeStyles} from '@material-ui/core/styles';
+import {
+    CardContent
+    , CardMedia, Grid,
+
+    CardActions,
+    Card,
+    CardHeader,
+    Typography,
+    Avatar,
+    IconButton,
+
+    CardActionArea,
 
 } from '@material-ui/core';
 
@@ -20,143 +21,131 @@ import FlashOnIcon from '@material-ui/icons/FlashOn';
 import LocalDrinkIcon from '@material-ui/icons/LocalDrink';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import ShareIcon from '@material-ui/icons/Share';
-import { ThemeProvider } from '@material-ui/core/styles';
-import Theme from './Theme';
+
+import axiosInstance from '../axios';
+
 const useStyles = makeStyles((theme) => ({
-  root: {
-    flexGrow: 1,
-    marginTop:'2rem',
-   
-  },
-  icon:{
-    display:'flex',
-    flexDirection: 'row',
-    flexWrap: 'nowrap',
-    alignContent: 'center',
-    justifyContent: 'space-around'
-  },
-  media: {
-    height: 0,
-    paddingTop: '56.25%',
-  },
-  share: {
-    marginLeft: 'auto',
-  },
+    root: {
+        flexGrow: 1,
+        marginTop: '2rem',
+
+    },
+    card: {
+        transition: "0.3s",
+        boxShadow: "0 8px 40px -12px rgba(0,0,0,0.3)",
+        "&:hover": {
+            boxShadow: "0 16px 70px -12.125px rgba(0,0,0,0.3)"
+        }
+    },
+    icon: {
+        display: 'flex',
+        flexDirection: 'row',
+        flexWrap: 'nowrap',
+        alignContent: 'center',
+        justifyContent: 'space-around'
+    },
+    media: {
+        height: 0,
+        paddingTop: '56.25%',
+    },
+    share: {
+        marginLeft: 'auto',
+    },
+
 }));
 
 
-function Item(){
-  const classes = useStyles();
+function Item({item}) {
 
-  return (
- 
-    <Card >
-      <CardHeader
-        avatar={
-          <Avatar aria-label="profile" bgcolor="secondary">
-            P
-          </Avatar>
-        }
-        action={
-          <IconButton aria-label="favorite">
-            <FavoriteIcon color="secondary"/>
-          </IconButton>
-        }
-        title="Prince Hostel"
-        subheader="Bank Road, Gorakhpur"
-       
-      />
-      <CardActionArea>
-      <CardMedia
-        className = {classes.media}
-        image="https://images.unsplash.com/photo-1554995207-c18c203602cb?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=750&q=80"
-        title="Paella dish"
-      />
-      <CardContent className={classes.icon}>
-          <WifiIcon color="primary" />
-          <FastfoodIcon color="primary"  />
-          <FlashOnIcon  color="primary" />
-          <LocalDrinkIcon  color="primary" />
-      </CardContent>
-      </CardActionArea>
-      <CardActions disableSpacing>
-     
-      <Typography variant="h6"  component="h6" > 
-      &#8377; 2500   
+    const classes = useStyles();
 
-        </Typography>
-  
-        <IconButton
-          className={classes.share}
-          aria-label="share"
-        >
-           <ShareIcon />
-        </IconButton>
-      </CardActions>
-    </Card>
+    return (
 
-  );
+        <Card className={classes.card}>
+            <CardHeader
+                avatar={
+                    <Avatar aria-label="profile" bgcolor="secondary">
+                        P
+                    </Avatar>
+                }
+                action={
+                    <IconButton aria-label="favorite">
+                        <FavoriteIcon color="secondary"/>
+                    </IconButton>
+                }
+                title={item.name}
+                subheader={item.address}
+
+            />
+            <CardActionArea>
+                <CardMedia
+                    className={classes.media}
+                    image={'http://127.0.0.1:4000/' + item.images[0]}
+                    title="Paella dish"
+                />
+                <CardContent className={classes.icon}>
+                    <WifiIcon color={item.facility.wifi ? "primary" : "disabled"}/>
+                    <FastfoodIcon color={item.facility.food ? "primary" : "disabled"}/>
+                    <FlashOnIcon color={item.facility.electric ? "primary" : "disabled"}/>
+                    <LocalDrinkIcon color={item.facility.water ? "primary" : "disabled"}/>
+                </CardContent>
+            </CardActionArea>
+            <CardActions disableSpacing>
+
+                <Typography variant="h6" component="h6"
+                            style={{marginLeft: '15px'}}> &#8377; {item.price} </Typography>
+
+                <IconButton
+                    className={classes.share}
+                    aria-label="share"
+                >
+                    <ShareIcon/>
+                </IconButton>
+            </CardActions>
+        </Card>
+
+    );
 }
-export default function Room() {
-  
-  const classes = useStyles();
 
-  return (
-    <ThemeProvider theme={Theme}>
-    <CssBaseline/>
-    <div className={classes.root}>
-      <Grid container spacing={2}>
-      
-        <Grid item xs={12} sm={4}>
-          <Paper className={classes.paper}><Item/></Paper>
-        </Grid>
-        <Grid item xs={12} sm={4}>
-          <Paper className={classes.paper}><Item/></Paper>
-        </Grid>
-        <Grid item xs={12} sm={4}>
-          <Paper className={classes.paper}><Item/></Paper>
-        </Grid>
-        <Grid item xs={12} sm={4}>
-          <Paper className={classes.paper}><Item/></Paper>
-        </Grid>
-        <Grid item xs={12} sm={4}>
-          <Paper className={classes.paper}><Item/></Paper>
-        </Grid>
-        <Grid item xs={12} sm={4}>
-          <Paper className={classes.paper}><Item/></Paper>
-        </Grid>
-        <Grid item xs={12} sm={4}>
-          <Paper className={classes.paper}><Item/></Paper>
-        </Grid>
-        <Grid item xs={12} sm={4}>
-          <Paper className={classes.paper}><Item/></Paper>
-        </Grid>
-        <Grid item xs={12} sm={4}>
-          <Paper className={classes.paper}><Item/></Paper>
-        </Grid>
-        <Grid item xs={12} sm={4}>
-          <Paper className={classes.paper}><Item/></Paper>
-        </Grid>
-        <Grid item xs={12} sm={4}>
-          <Paper className={classes.paper}><Item/></Paper>
-        </Grid>
-        <Grid item xs={12} sm={4}>
-          <Paper className={classes.paper}><Item/></Paper>
-        </Grid>
-        <Grid item xs={12} sm={4}>
-          <Paper className={classes.paper}><Item/></Paper>
-        </Grid>
-        <Grid item xs={12} sm={4}>
-          <Paper className={classes.paper}><Item/></Paper>
-        </Grid>
-        <Grid item xs={12} sm={4}>
-          <Paper className={classes.paper}><Item/></Paper>
-        </Grid>
-        <Grid item xs={12} sm={4}>
-          <Paper className={classes.paper}><Item/></Paper>
-        </Grid>
-      </Grid>
-    </div>
-    </ThemeProvider>
-  );
+const roomdata = async (setroomState) => {
+    try {
+        const res = await axiosInstance.get('/room')
+        const allPosts = await res.data;
+        setroomState(allPosts.data)
+    } catch (err) {
+        console.log(err)
+    }
+
+}
+
+
+export default function Room() {
+
+
+    const [roomState, setroomState] = useState([]);
+
+    useEffect(() => {
+        roomdata(setroomState)
+    }, []);
+
+    const classes = useStyles();
+
+
+    return (
+
+        <div className={classes.root}>
+            <Grid container spacing={2}>
+                {
+                    roomState.map((item) => {
+                        return (<Grid
+                            item xs={12} sm={6} md={4} lg={3} key={item._id}>
+                            <Item item={item}/>
+                        </Grid>)
+                    })
+                }
+
+            </Grid>
+        </div>
+
+    );
 }
