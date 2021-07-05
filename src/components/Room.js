@@ -1,151 +1,135 @@
-import React, {useEffect, useState} from 'react';
-import {makeStyles} from '@material-ui/core/styles';
+import React, { useEffect, useState } from "react";
+import { makeStyles } from "@material-ui/core/styles";
 import {
-    CardContent
-    , CardMedia, Grid,
+  CardContent,
+  CardMedia,
+  Grid,
+  CardActions,
+  Card,
+  CardHeader,
+  Typography,
+  Avatar,
+  IconButton,
+  CardActionArea,
+} from "@material-ui/core";
 
-    CardActions,
-    Card,
-    CardHeader,
-    Typography,
-    Avatar,
-    IconButton,
+import FastfoodIcon from "@material-ui/icons/Fastfood";
+import WifiIcon from "@material-ui/icons/Wifi";
+import FlashOnIcon from "@material-ui/icons/FlashOn";
+import LocalDrinkIcon from "@material-ui/icons/LocalDrink";
+import FavoriteIcon from "@material-ui/icons/Favorite";
+import ShareIcon from "@material-ui/icons/Share";
 
-    CardActionArea,
-
-} from '@material-ui/core';
-
-import FastfoodIcon from '@material-ui/icons/Fastfood';
-import WifiIcon from '@material-ui/icons/Wifi';
-import FlashOnIcon from '@material-ui/icons/FlashOn';
-import LocalDrinkIcon from '@material-ui/icons/LocalDrink';
-import FavoriteIcon from '@material-ui/icons/Favorite';
-import ShareIcon from '@material-ui/icons/Share';
-
-import axiosInstance from '../axios';
+import axiosInstance from "../axios";
 
 const useStyles = makeStyles((theme) => ({
-    root: {
-        flexGrow: 1,
-        marginTop: '2rem',
-
+  root: {
+    flexGrow: 1,
+    marginTop: "2rem",
+  },
+  card: {
+    transition: "0.3s",
+    boxShadow: "0 8px 40px -12px rgba(0,0,0,0.3)",
+    "&:hover": {
+      boxShadow: "0 16px 70px -12.125px rgba(0,0,0,0.3)",
     },
-    card: {
-        transition: "0.3s",
-        boxShadow: "0 8px 40px -12px rgba(0,0,0,0.3)",
-        "&:hover": {
-            boxShadow: "0 16px 70px -12.125px rgba(0,0,0,0.3)"
-        }
-    },
-    icon: {
-        display: 'flex',
-        flexDirection: 'row',
-        flexWrap: 'nowrap',
-        alignContent: 'center',
-        justifyContent: 'space-around'
-    },
-    media: {
-        height: 0,
-        paddingTop: '56.25%',
-    },
-    share: {
-        marginLeft: 'auto',
-    },
-
+  },
+  icon: {
+    display: "flex",
+    flexDirection: "row",
+    flexWrap: "nowrap",
+    alignContent: "center",
+    justifyContent: "space-around",
+  },
+  media: {
+    height: 0,
+    paddingTop: "56.25%",
+  },
+  share: {
+    marginLeft: "auto",
+  },
 }));
 
+function Item({ item }) {
+  const classes = useStyles();
 
-function Item({item}) {
+  return (
+    <Card className={classes.card}>
+      <CardHeader
+        avatar={
+          <Avatar aria-label="profile" bgcolor="secondary">
+            P
+          </Avatar>
+        }
+        action={
+          <IconButton aria-label="favorite">
+            <FavoriteIcon color="secondary" />
+          </IconButton>
+        }
+        title={item.name}
+        subheader={`${item.address.city},${item.address.state}`}
+      />
+      <CardActionArea>
+        <CardMedia
+          className={classes.media}
+          image={"http://127.0.0.1:4000/" + item.images[0]}
+          title="Paella dish"
+        />
+        <CardContent className={classes.icon}>
+          <WifiIcon color={item.facility.wifi ? "primary" : "disabled"} />
+          <FastfoodIcon color={item.facility.food ? "primary" : "disabled"} />
+          <FlashOnIcon
+            color={item.facility.electric ? "primary" : "disabled"}
+          />
+          <LocalDrinkIcon
+            color={item.facility.water ? "primary" : "disabled"}
+          />
+        </CardContent>
+      </CardActionArea>
+      <CardActions disableSpacing>
+        <Typography variant="h6" component="h6" style={{ marginLeft: "15px" }}>
+          {item.price}{" "}
+        </Typography>
 
-    const classes = useStyles();
-
-    return (
-
-        <Card className={classes.card}>
-            <CardHeader
-                avatar={
-                    <Avatar aria-label="profile" bgcolor="secondary">
-                        P
-                    </Avatar>
-                }
-                action={
-                    <IconButton aria-label="favorite">
-                        <FavoriteIcon color="secondary"/>
-                    </IconButton>
-                }
-                title={item.name}
-                subheader={item.address}
-
-            />
-            <CardActionArea>
-                <CardMedia
-                    className={classes.media}
-                    image={'http://127.0.0.1:4000/' + item.images[0]}
-                    title="Paella dish"
-                />
-                <CardContent className={classes.icon}>
-                    <WifiIcon color={item.facility.wifi ? "primary" : "disabled"}/>
-                    <FastfoodIcon color={item.facility.food ? "primary" : "disabled"}/>
-                    <FlashOnIcon color={item.facility.electric ? "primary" : "disabled"}/>
-                    <LocalDrinkIcon color={item.facility.water ? "primary" : "disabled"}/>
-                </CardContent>
-            </CardActionArea>
-            <CardActions disableSpacing>
-
-                <Typography variant="h6" component="h6"
-                            style={{marginLeft: '15px'}}> &#8377; {item.price} </Typography>
-
-                <IconButton
-                    className={classes.share}
-                    aria-label="share"
-                >
-                    <ShareIcon/>
-                </IconButton>
-            </CardActions>
-        </Card>
-
-    );
+        <IconButton className={classes.share} aria-label="share">
+          <ShareIcon />
+        </IconButton>
+      </CardActions>
+    </Card>
+  );
 }
 
 const roomdata = async (setroomState) => {
-    try {
-        const res = await axiosInstance.get('/room')
-        const allPosts = await res.data;
-        setroomState(allPosts.data)
-    } catch (err) {
-        console.log(err)
-    }
+  try {
+    const res = await axiosInstance.get("/room");
+    const allPosts = await res.data;
 
-}
-
+    setroomState(allPosts.data);
+  } catch (err) {
+    console.log(err);
+  }
+};
 
 export default function Room() {
+  const [roomState, setroomState] = useState([]);
 
+  useEffect(() => {
+    roomdata(setroomState);
+  }, []);
 
-    const [roomState, setroomState] = useState([]);
+  const classes = useStyles();
 
-    useEffect(() => {
-        roomdata(setroomState)
-    }, []);
-
-    const classes = useStyles();
-
-
-    return (
-
-        <div className={classes.root}>
-            <Grid container spacing={2}>
-                {
-                    roomState.map((item) => {
-                        return (<Grid
-                            item xs={12} sm={6} md={4} lg={3} key={item._id}>
-                            <Item item={item}/>
-                        </Grid>)
-                    })
-                }
-
+  return (
+    <div className={classes.root}>
+      <Grid container spacing={2}>
+        {roomState.map((item) => {
+          return (
+            <Grid item xs={12} sm={6} md={4} lg={3} key={item._id}>
+              <Item item={item} />
             </Grid>
-        </div>
-
-    );
+          );
+        })}
+      </Grid>
+    </div>
+  );
 }

@@ -2,6 +2,8 @@
   "name": "roommate",
   "version": "0.1.0",
   "private": true,
+  "proxy": "http://127.0.0.1:4000",
+
   "dependencies": {
     "@material-ui/core": "^4.11.3",
     "@material-ui/icons": "^4.11.2",
@@ -10,12 +12,17 @@
     "@testing-library/react": "^11.2.7",
     "@testing-library/user-event": "^12.8.3",
     "axios": "^0.21.1",
+    "cors": "^2.8.5",
+    "country-state-city": "^3.0.0",
+    "material-ui-dropzone": "^3.5.0",
     "material-ui-phone-number": "^2.2.6",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-hook-form": "^6.15.1",
+    "react-number-format": "^4.6.3",
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.3",
+    "uuid": "^8.3.2",
     "web-vitals": "^1.1.2"
   },
   "scripts": {

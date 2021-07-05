@@ -11,6 +11,7 @@ import axiosInstance from '../axios';
 import CloseIcon from '@material-ui/icons/Close';
 import IconButton from '@material-ui/core/IconButton';
 import Alert from '@material-ui/lab/Alert';
+
 const useStyles = makeStyles((theme) => ({
     Box: {
         margin: 'auto'
@@ -52,11 +53,17 @@ export default function Signin() {
         errors
     } = useForm();
     const {push} = useHistory();
+    
+   
+
+
     const onSubmit = async(data) => {
+        
+          const dataform=JSON.stringify(data)
         try{
            
-           const res=await axiosInstance.post('/users/signin/', data)
-           console.log(res)
+           const res=await axiosInstance.post('/users/signin/',dataform )
+           
            const datares = await res.data
            if (res.status === 202 && datares){
                push('/');
@@ -66,7 +73,7 @@ export default function Signin() {
             console.log(err)
             const jsonData = JSON.parse(err.request.response);
            
-            setfailed(jsonData.message)
+          setfailed(jsonData.message[0].msg)
             setOpen(true)
            
         }
