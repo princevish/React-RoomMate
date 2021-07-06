@@ -11,8 +11,9 @@ import {
   Avatar,
   IconButton,
   CardActionArea,
+ 
 } from "@material-ui/core";
-
+import FavoriteBorderOutlinedIcon from '@material-ui/icons/FavoriteBorderOutlined';
 import FastfoodIcon from "@material-ui/icons/Fastfood";
 import WifiIcon from "@material-ui/icons/Wifi";
 import FlashOnIcon from "@material-ui/icons/FlashOn";
@@ -21,6 +22,7 @@ import FavoriteIcon from "@material-ui/icons/Favorite";
 import ShareIcon from "@material-ui/icons/Share";
 
 import axiosInstance from "../axios";
+
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -50,20 +52,60 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+
 function Item({ item }) {
   const classes = useStyles();
+  const [fav, setFav] = useState(false);
+  const [uf,setUf]=useState('')
+
+  const favtrue =(id,fs)=>{
+        return  fs.includes(id)
+  }
+  const handleFav = async (id) => {
+    console.log(id)
+    const like = await axiosInstance.get(`/room/fav/${id}`)
+    if(like.status===201){
+      setFav(false)
+    }else{ 
+      setFav(true)
+    }
+  };
+  
+  useEffect(() => {
+    fetch('/users/list', {
+      method: 'GET',
+      headers:{
+        Accept:"appllication/json",
+        "Content-Type":"application/json"
+      },credentials:"include"
+    }, {})
+    .then(function(response) {
+      return response.json();
+    })
+    .then(function(data) {
+      if(data.data?.fav){ setUf(data.data.fav)}
+     
+    })
+  }, [])
+useEffect(() => {
+
+  if(favtrue(item._id,uf)){
+    setFav(true)
+  } 
+}, [uf])
 
   return (
     <Card className={classes.card}>
       <CardHeader
         avatar={
-          <Avatar aria-label="profile" bgcolor="secondary">
-            P
-          </Avatar>
+          <Avatar
+            aria-label="profile"
+            src={"http://127.0.0.1:4000/upload/" + item.users.image}
+          ></Avatar>
         }
         action={
-          <IconButton aria-label="favorite">
-            <FavoriteIcon color="secondary" />
+          <IconButton aria-label="favorite" onClick={() => handleFav(item._id)}>
+            {fav ?<FavoriteIcon  color="secondary" /> :<FavoriteBorderOutlinedIcon color="secondary"/> }
           </IconButton>
         }
         title={item.name}

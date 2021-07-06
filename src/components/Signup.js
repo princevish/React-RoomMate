@@ -99,7 +99,7 @@ export default function Signup() {
         console.log(err);
         const jsonData = JSON.parse(err.request.response);
         if (jsonData.message) {
-          setfailed(jsonData.message);
+          setfailed(jsonData.message[0].msg);
           setOpen(true);
         } else {
           setfailed(jsonData.error);

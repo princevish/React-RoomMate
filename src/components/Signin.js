@@ -72,9 +72,16 @@ export default function Signin() {
         }catch(err){
             console.log(err)
             const jsonData = JSON.parse(err.request.response);
-           
-          setfailed(jsonData.message[0].msg)
+             
+            if(jsonData.message[0].msg){
+                setfailed(jsonData.message[0].msg)
+                setOpen(true)
+               
+            }else{
+            setfailed(jsonData.message)
             setOpen(true)
+            }
+          
            
         }
      
