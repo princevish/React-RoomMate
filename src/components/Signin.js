@@ -62,7 +62,7 @@ export default function Signin() {
           const dataform=JSON.stringify(data)
         try{
            
-           const res=await axiosInstance.post('/users/signin/',dataform )
+           const res=await axiosInstance.post('/api/users/signin/',dataform )
            
            const datares = await res.data
            if (res.status === 202 && datares){

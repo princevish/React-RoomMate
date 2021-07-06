@@ -87,7 +87,7 @@ export default function Signup() {
       };
       try {
         const res = await axiosInstance.post(
-          "/users/signup/",
+          "/api/users/signup/",
           formData,
           config
         );

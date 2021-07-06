@@ -24,7 +24,7 @@ export default function Sell() {
           setcstate(state) 
     }, [])
     React.useEffect(() => {
-      fetch('/auth', {
+      fetch('/api/auth', {
         method: 'GET',
         headers:{
           Accept:"appllication/json",

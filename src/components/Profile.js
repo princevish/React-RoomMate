@@ -14,7 +14,7 @@ export default function Profile() {
     const classes = useStyles();
     const {push} = useHistory();
     React.useEffect(() => {
-        fetch('/auth', {
+        fetch('/api/auth', {
           method: 'GET',
           headers:{
             Accept:"appllication/json",
