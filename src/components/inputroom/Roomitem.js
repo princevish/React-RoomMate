@@ -9,9 +9,8 @@ import {
   Avatar,
   IconButton,
   CardActionArea,
- 
 } from "@material-ui/core";
-import FavoriteBorderOutlinedIcon from '@material-ui/icons/FavoriteBorderOutlined';
+import FavoriteBorderOutlinedIcon from "@material-ui/icons/FavoriteBorderOutlined";
 import FastfoodIcon from "@material-ui/icons/Fastfood";
 import WifiIcon from "@material-ui/icons/Wifi";
 import FlashOnIcon from "@material-ui/icons/FlashOn";
@@ -20,7 +19,7 @@ import FavoriteIcon from "@material-ui/icons/Favorite";
 import ShareIcon from "@material-ui/icons/Share";
 import React, { useEffect, useState } from "react";
 import axiosInstance from "../../axios";
-
+import { useHistory } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -50,92 +49,102 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-
 export default function Item({ item }) {
- 
-    const classes = useStyles();
-    const [fav, setFav] = useState(false);
-    const [uf,setUf]=useState('')
-  
-    const favtrue =(id,fs)=>{
-          return  fs.includes(id)
+  const classes = useStyles();
+  const [fav, setFav] = useState(false);
+  const [uf, setUf] = useState("");
+  const { push } = useHistory();
+  const favtrue = (id, fs) => {
+    return fs.includes(id);
+  };
+  const handleFav = async (id) => {
+    const like = await axiosInstance.get(`/api/room/fav/${id}`);
+    if (like.status === 201) {
+      setFav(false);
+    } else {
+      setFav(true);
     }
-    const handleFav = async (id) => {
-   
-      const like = await axiosInstance.get(`/api/room/fav/${id}`)
-      if(like.status===201){
-        setFav(false)
-      }else{ 
-        setFav(true)
-      }
-    };
-    
-    useEffect(() => {
-      fetch('/api/users/list', {
-        method: 'GET',
-        headers:{
-          Accept:"appllication/json",
-          "Content-Type":"application/json"
-        },credentials:"include"
-      }, {})
-      .then(function(response) {
+  };
+
+  useEffect(() => {
+    fetch(
+      "/api/users/list",
+      {
+        method: "GET",
+        headers: {
+          Accept: "appllication/json",
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+      },
+      {}
+    )
+      .then(function (response) {
         return response.json();
       })
-      .then(function(data) {
-        if(data.data?.fav){ setUf(data.data.fav)}
-       
-      })
-    }, [])
+      .then(function (data) {
+        if (data.data?.fav) {
+          setUf(data.data.fav);
+        }
+      });
+  }, []);
+
   useEffect(() => {
-  
-    if(favtrue(item._id,uf)){
-      setFav(true)
-    } 
-  }, [uf])
-  
-    return (
-      <Card className={classes.card}>
-        <CardHeader
-          avatar={
-            <Avatar
-              aria-label="profile"
-              src={"http://127.0.0.1:4000/upload/" + item.users.image}
-            ></Avatar>
-          }
-          action={
-            <IconButton aria-label="favorite" onClick={() => handleFav(item._id)}>
-              {fav ?<FavoriteIcon  color="secondary" /> :<FavoriteBorderOutlinedIcon color="secondary"/> }
-            </IconButton>
-          }
-          title={item.name}
-          subheader={`${item.address.city},${item.address.state}`}
-        />
-        <CardActionArea>
-          <CardMedia
-            className={classes.media}
-            image={"http://127.0.0.1:4000/" + item.images[0]}
-            title="Paella dish"
-          />
-          <CardContent className={classes.icon}>
-            <WifiIcon color={item.facility.wifi ? "primary" : "disabled"} />
-            <FastfoodIcon color={item.facility.food ? "primary" : "disabled"} />
-            <FlashOnIcon
-              color={item.facility.electric ? "primary" : "disabled"}
-            />
-            <LocalDrinkIcon
-              color={item.facility.water ? "primary" : "disabled"}
-            />
-          </CardContent>
-        </CardActionArea>
-        <CardActions disableSpacing>
-          <Typography variant="h6" component="h6" style={{ marginLeft: "15px" }}>
-            {item.price}{" "}
-          </Typography>
-  
-          <IconButton className={classes.share} aria-label="share">
-            <ShareIcon />
+    if (favtrue(item._id, uf)) {
+      setFav(true);
+    }
+  }, [uf, item._id]);
+
+  const handleroom = (item) => {
+    push(`/roomview/${item._id}`);
+  };
+  return (
+    <Card className={classes.card}>
+      <CardHeader
+        avatar={
+          <Avatar
+            aria-label="profile"
+            src={"http://127.0.0.1:4000/" + item.users.image}
+          ></Avatar>
+        }
+        action={
+          <IconButton aria-label="favorite" onClick={() => handleFav(item._id)}>
+            {fav ? (
+              <FavoriteIcon color="secondary" />
+            ) : (
+              <FavoriteBorderOutlinedIcon color="secondary" />
+            )}
           </IconButton>
-        </CardActions>
-      </Card>
-    );
-  }
+        }
+        title={item.name}
+        subheader={`${item.address.city},${item.address.state}`}
+      />
+      <CardActionArea onClick={() => handleroom(item)}>
+        <CardMedia
+          className={classes.media}
+          image={"http://127.0.0.1:4000/" + item.images[0]}
+          title="Paella dish"
+        />
+        <CardContent className={classes.icon}>
+          <WifiIcon color={item.facility.wifi ? "primary" : "disabled"} />
+          <FastfoodIcon color={item.facility.food ? "primary" : "disabled"} />
+          <FlashOnIcon
+            color={item.facility.electric ? "primary" : "disabled"}
+          />
+          <LocalDrinkIcon
+            color={item.facility.water ? "primary" : "disabled"}
+          />
+        </CardContent>
+      </CardActionArea>
+      <CardActions disableSpacing>
+        <Typography variant="h6" component="h6" style={{ marginLeft: "15px" }}>
+          {item.price}{" "}
+        </Typography>
+
+        <IconButton className={classes.share} aria-label="share">
+          <ShareIcon />
+        </IconButton>
+      </CardActions>
+    </Card>
+  );
+}

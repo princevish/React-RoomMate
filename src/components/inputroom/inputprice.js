@@ -1,14 +1,9 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React from "react";
+import PropTypes from "prop-types";
 
-import NumberFormat from 'react-number-format';
+import NumberFormat from "react-number-format";
 
-
-
-import TextField from '@material-ui/core/TextField';
-
-
-
+import TextField from "@material-ui/core/TextField";
 
 function NumberFormatCustom(props) {
   const { inputRef, onChange, ...other } = props;
@@ -39,10 +34,9 @@ NumberFormatCustom.propTypes = {
 };
 
 export default function PriceInputs(props) {
-  
   const [values, setValues] = React.useState({
-    textmask: '(1  )    -    ',
-    numberformat: '',
+    textmask: "(1  )    -    ",
+    numberformat: "",
   });
 
   const handleChange = (event) => {
@@ -53,24 +47,20 @@ export default function PriceInputs(props) {
   };
 
   return (
-  
-     
-      <TextField
-        label="Price"
-        
-        onChange={handleChange}
-        fullWidth
-        variant="outlined"
-        name="price"
-        inputRef={props.refprice({
-          required: "price Required.",
-     })}
-        error={Boolean(props.err.price)}
-        helperText={props.err.price?.message}
-        InputProps={{
-          inputComponent: NumberFormatCustom,
-        }}
-      />
-
+    <TextField
+      label="Price"
+      onChange={handleChange}
+      fullWidth
+      variant="outlined"
+      name="price"
+      inputRef={props.refprice({
+        required: "Price Required.",
+      })}
+      error={Boolean(props.err.price)}
+      helperText={props.err.price?.message}
+      InputProps={{
+        inputComponent: NumberFormatCustom,
+      }}
+    />
   );
 }
