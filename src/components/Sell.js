@@ -1,5 +1,5 @@
 import React from "react";
-
+import { WaveTopBottomLoading } from "react-loadingg";
 import {
   Grid,
   TextField,
@@ -47,6 +47,7 @@ export default function Sell() {
   const [citycode, setCitycode] = React.useState("");
   const [alt, setImg] = React.useState();
   const [img,setImgimg] =React.useState(false)
+  const [load, setLoad] = React.useState(false);
   const { push } = useHistory();
   const classes = useStyles();
   React.useEffect(() => {
@@ -147,6 +148,7 @@ export default function Sell() {
       const data = await res.data;
 
       if (data) {
+        setLoad(false)
         push("/");
       }
     } catch (err) {
@@ -366,6 +368,7 @@ export default function Sell() {
               />
             </Grid>
             <Grid item xs={12}>
+              {load && <WaveTopBottomLoading/>}
               <label>
                 <input
                   id="btn-upload"
@@ -400,7 +403,7 @@ export default function Sell() {
               </label>
               {img && <Typography variant="body2" color="secondary"> Photo not allow more then 5MB </Typography>}
             </Grid>
-            <Button type="submit" fullWidth variant="contained" color="primary">
+            <Button type="submit" fullWidth variant="contained" color="primary" onClick={()=>setLoad(true)}>
               ADD
             </Button>
           </Grid>

@@ -36,6 +36,7 @@ const useStyles = makeStyles({
   },
   imgroom: {
     borderRadius: "2%",
+    maxHeight:"25rem"
   },
   icon: {
     flexGrow: "1",
@@ -91,9 +92,9 @@ export default function Roomview() {
             {roomState.images.map((item, i) => (
               <CardMedia key={i}
                 component="img"
-                alt="Profile image"
+                alt="room image"
                 className={classes.imgroom}
-                image={`http://localhost:4000/${item}`}
+                image={`../${item}`}
               />
             ))}
           </Carousel>
@@ -141,7 +142,7 @@ export default function Roomview() {
               component="img"
               alt="Profile image"
               className={classes.image}
-              image={`http://localhost:4000/${roomState.users.image}`}
+              image={`../${roomState.users.image}`}
             />
           </Grid>
 

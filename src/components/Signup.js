@@ -18,6 +18,7 @@ import IconButton from "@material-ui/core/IconButton";
 import Alert from "@material-ui/lab/Alert";
 import MuiPhoneNumber from "material-ui-phone-number";
 import CloudUploadIcon from "@material-ui/icons/CloudUpload";
+import { WaveTopBottomLoading } from "react-loadingg";
 const useStyles = makeStyles((theme) => ({
   Box: {
     margin: "auto",
@@ -57,6 +58,7 @@ export default function Signup() {
   const [error, setError] = useState(false);
   const [alt, setImg] = React.useState();
   const [img, setImgimg] = React.useState(false);
+  const [load, setLoad] = React.useState(false);
   const { register, handleSubmit, errors } = useForm();
   const { push } = useHistory();
 
@@ -94,6 +96,7 @@ export default function Signup() {
         );
         const data = await res.data.user;
         if (res.status === 201 && data) {
+          setLoad(false)
           push("/");
         }
       } catch (err) {
@@ -229,6 +232,7 @@ export default function Signup() {
               />
             </Grid>
             <Grid item xs={12}>
+            {load && <WaveTopBottomLoading/>}
               <label>
                 <input
                   id="btn-upload"
@@ -275,6 +279,7 @@ export default function Signup() {
             variant="contained"
             color="primary"
             className={classes.submit}
+            onClick={()=>setLoad(true)}
           >
             Sign Up
           </Button>
