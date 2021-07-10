@@ -1,6 +1,7 @@
 import React from "react";
 import Item from "../components/inputroom/Roomitem";
 import axiosInstance from "../axios";
+import { WaveTopBottomLoading } from "react-loadingg";
 import {
   Grid,
   FormControl,
@@ -11,7 +12,7 @@ import {
 } from "@material-ui/core";
 import { State, City } from "country-state-city";
 
-const Roomdata = async (roomState, statevalue, cityvalue) => {
+const Roomdata = async (roomState, statevalue, cityvalue,setLoad) => {
   try {
     if (statevalue && cityvalue) {
       const res = await axiosInstance.get(
@@ -20,12 +21,15 @@ const Roomdata = async (roomState, statevalue, cityvalue) => {
       const allPosts = await res.data;
 
       roomState(allPosts.data);
+      setLoad(false);
     } else {
       if (statevalue) {
+       
         const res = await axiosInstance.get(`/api/room/room/${statevalue}`);
         const allPosts = await res.data;
 
         roomState(allPosts.data);
+        setLoad(false);
       }
     }
   } catch (err) {
@@ -60,6 +64,7 @@ export default function Search() {
   const [cityvalue, setCityvalue] = React.useState("");
   const [statevalue, setStatevalue] = React.useState("");
   const [room, setRoom] = React.useState("");
+  const [load, setLoad] = React.useState(true);
 
   React.useEffect(() => {
     const state = State.getStatesOfCountry("IN");
@@ -72,16 +77,18 @@ export default function Search() {
   }, [citycode]);
 
   React.useEffect(() => {
-    Roomdata(setRoom, statevalue, cityvalue);
+    Roomdata(setRoom, statevalue, cityvalue,setLoad);
   }, [cityvalue, statevalue]);
 
   const handelchange = (e) => {
     setCitycode(e.target.value);
     setStatevalue(e.target.value);
+    setLoad(true);
   };
 
   const handlecity = (e) => {
     setCityvalue(e.target.value);
+    setLoad(true);
   };
 
   return (
@@ -128,9 +135,11 @@ export default function Search() {
           </Select>
         </FormControl>
       </Grid>
-
+       
       <Grid container spacing={2} style={{ marginTop: "50px" }}>
+      {load && <WaveTopBottomLoading />}
         <Roomitem user={room} />
+
       </Grid>
     </Grid>
   );

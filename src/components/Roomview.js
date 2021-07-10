@@ -14,6 +14,7 @@ import FastfoodIcon from "@material-ui/icons/Fastfood";
 import WifiIcon from "@material-ui/icons/Wifi";
 import FlashOnIcon from "@material-ui/icons/FlashOn";
 import LocalDrinkIcon from "@material-ui/icons/LocalDrink";
+import { PointSpreadLoading } from "react-loadingg";
 const useStyles = makeStyles({
   Box: {
     margin: "auto",
@@ -44,7 +45,6 @@ const useStyles = makeStyles({
     justifyContent: "space-around",
   },
   details: {
-    
     flexGrow: "1",
     alignContent: "center",
     justifyContent: "space-around",
@@ -57,13 +57,13 @@ const useStyles = makeStyles({
   },
 });
 
-const roomdata = async (setroomState, params, setNotfound) => {
+const roomdata = async (setroomState, params, setNotfound,setLoad) => {
   try {
     const res = await axiosInstance.get(`/api/room/roomview/${params}`);
-    console.log(res.data);
     const allPosts = await res.data;
 
     setroomState(allPosts.data);
+    setLoad(false);
   } catch (err) {
     if (err.request.status === 404) {
       setNotfound(true);
@@ -74,19 +74,22 @@ const roomdata = async (setroomState, params, setNotfound) => {
 export default function Roomview() {
   const [roomState, setroomState] = useState("");
   const [notfound, setNotfound] = useState(false);
+  const [load, setLoad] = useState(true);
+
   let { id } = useParams();
   const classes = useStyles();
   useEffect(() => {
-    roomdata(setroomState, id, setNotfound);
+    roomdata(setroomState, id, setNotfound,setLoad);
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
   return (
-    <Box className={classes.Box} maxWidth="xs">
+    <Box className={roomState? classes.Box : ""} maxWidth="xs">
+       {load && <PointSpreadLoading />}
       {notfound && <Typography variant="h4">Not Found</Typography>}
       {roomState && (
         <Grid container spacing={3}>
           <Carousel>
             {roomState.images.map((item, i) => (
-              <CardMedia
+              <CardMedia key={i}
                 component="img"
                 alt="Profile image"
                 className={classes.imgroom}
@@ -151,12 +154,16 @@ export default function Roomview() {
               <Typography variant="body1">{roomState.users.mobile}</Typography>
             </Box>
           </Grid>
-          <Grid container>
-            <Grid item xs={12}>
-              {" "}
-              <Typography variant="h6">Description</Typography>
-            </Grid>
-
+          <Grid item xs={12} sm={12}>
+            <Typography variant="h6">Address</Typography>
+          </Grid>
+          <Grid item xs={12} sm={12}>
+            <Typography variant="body1">{roomState.address.add}, {roomState.address.city},{roomState.address.state}</Typography>
+          </Grid>
+          <Grid item xs={12} sm={12}>
+            <Typography variant="h6">Description</Typography>
+          </Grid>
+          <Grid item xs={12} sm={12}>
             <Typography variant="body1">{roomState.description}</Typography>
           </Grid>
         </Grid>

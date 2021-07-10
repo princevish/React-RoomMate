@@ -104,7 +104,7 @@ export default function Item({ item }) {
         avatar={
           <Avatar
             aria-label="profile"
-            src={"http://127.0.0.1:4000/" + item.users.image}
+            src={ item.users.image}
           ></Avatar>
         }
         action={
@@ -122,8 +122,8 @@ export default function Item({ item }) {
       <CardActionArea onClick={() => handleroom(item)}>
         <CardMedia
           className={classes.media}
-          image={"http://127.0.0.1:4000/" + item.images[0]}
-          title="Paella dish"
+          image={item.images[0]}
+          title="room_image"
         />
         <CardContent className={classes.icon}>
           <WifiIcon color={item.facility.wifi ? "primary" : "disabled"} />

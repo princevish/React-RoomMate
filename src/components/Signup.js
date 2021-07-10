@@ -56,6 +56,7 @@ export default function Signup() {
   const [phone, setPhone] = useState("");
   const [error, setError] = useState(false);
   const [alt, setImg] = React.useState();
+  const [img, setImgimg] = React.useState(false);
   const { register, handleSubmit, errors } = useForm();
   const { push } = useHistory();
 
@@ -99,8 +100,14 @@ export default function Signup() {
         console.log(err);
         const jsonData = JSON.parse(err.request.response);
         if (jsonData.message) {
-          setfailed(jsonData.message[0].msg);
-          setOpen(true);
+          if (jsonData.message[0].msg) {
+            setfailed(jsonData.message[0].msg);
+            setOpen(true);
+          }else{
+            setfailed(jsonData.message);
+            setOpen(true);
+
+          }
         } else {
           setfailed(jsonData.error);
           setOpen(true);
@@ -111,10 +118,14 @@ export default function Signup() {
     }
   };
   const imgupload = (e) => {
+    setImgimg(false);
     if (e.target.files[0]) {
       let filelen = [];
       const len = e.target.files["length"];
       for (let i = 0; i < len; i++) {
+        if (Number(e.target.files[i].size) > 5082746) {
+          setImgimg(true);
+        }
         filelen.push(URL.createObjectURL(e.target.files[i]));
       }
       setImg(filelen);
@@ -228,6 +239,7 @@ export default function Signup() {
                   ref={register({
                     required: "image is required.",
                   })}
+                  error={img ? "true" : "false"}
                 />
                 <Button
                   className="btn-choose"
@@ -235,7 +247,9 @@ export default function Signup() {
                   variant="outlined"
                   fullWidth
                   component="span"
-                  color={errors.image ? "secondary" : "default"}
+                  color={
+                    errors.image ? "secondary" : img ? "secondary" : "default"
+                  }
                   startIcon={<CloudUploadIcon />}
                 >
                   {alt ? (
@@ -247,6 +261,12 @@ export default function Signup() {
                   )}
                 </Button>
               </label>
+              {img && (
+                <Typography variant="body2" color="secondary">
+                  {" "}
+                  Photo not allow more then 5MB{" "}
+                </Typography>
+              )}
             </Grid>
           </Grid>
           <Button

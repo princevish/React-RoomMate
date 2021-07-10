@@ -4,6 +4,8 @@ import { makeStyles } from "@material-ui/core/styles";
 import { useHistory } from "react-router-dom";
 import axiosInstance from "../axios";
 import Item from "../components/inputroom/Roomitem";
+import { TouchBallLoading } from "react-loadingg";
+import { Button } from "@material-ui/core";
 const useStyles = makeStyles({
   Box: {
     margin: "auto",
@@ -18,23 +20,24 @@ const useStyles = makeStyles({
   },
 });
 
-const Userdata = async (setroomState) => {
-  try {
-    const res = await axiosInstance.get("/api/users/list");
-    const allPosts = await res.data;
-
-    setroomState(allPosts.data);
-  } catch (err) {
-    console.log(err);
-  }
-};
 export default function Profile() {
   const classes = useStyles();
   const { push } = useHistory();
   const [user, setUser] = React.useState("");
+  const [load, setLoad] = React.useState(true);
+  const Userdata = async (setroomState, setLoad) => {
+    try {
+      const res = await axiosInstance.get("/api/users/list");
+      const allPosts = await res.data;
 
+      setroomState(allPosts.data);
+      setLoad(false);
+    } catch (err) {
+      console.log(err);
+    }
+  };
   React.useEffect(() => {
-    Userdata(setUser);
+    Userdata(setUser, setLoad);
     fetch(
       "/api/auth",
       {
@@ -55,7 +58,18 @@ export default function Profile() {
           push("/signup");
         }
       });
-  }, []);// eslint-disable-line react-hooks/exhaustive-deps
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  const logout=async()=>{
+    try {
+      const res = await axiosInstance.get("/api/users/logout");
+      if(res.status===200){
+      push('/signin')
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  }
   const Roomitem = (user) => {
     if (user.user) {
       if (user.user.length !== 0) {
@@ -73,11 +87,12 @@ export default function Profile() {
         </Typography>
       );
     }
-    return true;
+    return null;
   };
 
   return (
-    <Box className={classes.Box} maxWidth="xs">
+    <Box className={user ? classes.Box : ""} maxWidth="xs">
+      {load && <TouchBallLoading />}
       {user && (
         <Grid container spacing={3}>
           <Grid item xs={12} sm={4}>
@@ -101,6 +116,7 @@ export default function Profile() {
               <Typography variant="h5">{user.email}</Typography>
               <Typography variant="h5">{user.mobile}</Typography>
             </Box>
+            <Button variant="outlined" color="secondary" onClick={logout}>Signout</Button>
           </Grid>
         </Grid>
       )}

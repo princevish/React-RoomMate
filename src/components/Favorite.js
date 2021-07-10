@@ -3,6 +3,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import Item from "../components/inputroom/Roomitem";
 import { Grid } from "@material-ui/core";
 import axiosInstance from "../axios";
+import { DiamonLoading } from "react-loadingg";
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
@@ -16,6 +17,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Favorite() {
   const [roomstate, setroomState] = useState(false);
+  const [load, setLoad] = useState(true);
 
   const Fav = ({ items }) => {
     return items.map((item) => {
@@ -31,6 +33,10 @@ export default function Favorite() {
       const res = await axiosInstance.get("/api/users/fav");
       const allPosts = await res.data;
       setroomState(allPosts.data.fav);
+      if(Boolean(allPosts.data.fav.length)){
+      setLoad(false)
+      }
+     
     } catch (err) {
       console.log(err);
     }
@@ -38,11 +44,12 @@ export default function Favorite() {
   useEffect(() => {
     roomdata(setroomState);
   }, []);
-
+  
   const classes = useStyles();
 
   return (
     <div className={classes.root}>
+       {load && <DiamonLoading />}
       <Grid container spacing={2}>
         {roomstate && <Fav items={roomstate} />}
       </Grid>

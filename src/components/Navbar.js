@@ -15,6 +15,8 @@ const useStyles = makeStyles((theme) => ({
 
   title: {
     flexGrow: 1,
+    textDecoration:"none",
+    color:"white"
   },
   fabButton: {
     height: "3rem",
@@ -35,9 +37,10 @@ export default function ButtonAppBar() {
   return (
     <AppBar className={classes.root}>
       <Toolbar>
+        <Link to="/" className={classes.title}>
         <Typography variant="h6" className={classes.title}>
           RoomMate
-        </Typography>
+        </Typography></Link>
         <Hidden smDown>
           <BottomNavigation
             value={value}

@@ -46,6 +46,7 @@ export default function Sell() {
   const [city, setcity] = React.useState([]);
   const [citycode, setCitycode] = React.useState("");
   const [alt, setImg] = React.useState();
+  const [img,setImgimg] =React.useState(false)
   const { push } = useHistory();
   const classes = useStyles();
   React.useEffect(() => {
@@ -84,15 +85,21 @@ export default function Sell() {
     setCitycode(e.target.value);
   };
   const imgupload = (e) => {
+   
+    setImgimg(false)
     if (e.target.files[0]) {
       let filelen = [];
       const len = e.target.files["length"];
       for (let i = 0; i < len; i++) {
+        if(Number(e.target.files[i].size) > 5082746){
+            setImgimg(true)
+        }
         filelen.push(URL.createObjectURL(e.target.files[i]));
       }
       setImg(filelen);
     }
   };
+ 
   const onSubmit = async (data) => {
     const {
       name,
@@ -370,6 +377,7 @@ export default function Sell() {
                     required: "image is required.",
                   })}
                   multiple
+                  error={img ? "true":"false"}
                 />
                 <Button
                   className="btn-choose"
@@ -377,7 +385,7 @@ export default function Sell() {
                   variant="outlined"
                   fullWidth
                   component="span"
-                  color={errors.images ? "secondary" : "default"}
+                  color={errors.images ? "secondary" : img?"secondary":"default" }
                   startIcon={<CloudUploadIcon />}
                 >
                   {alt
@@ -387,8 +395,10 @@ export default function Sell() {
                     : errors.images
                     ? errors.images?.message
                     : "upload"}
+                   
                 </Button>
               </label>
+              {img && <Typography variant="body2" color="secondary"> Photo not allow more then 5MB </Typography>}
             </Grid>
             <Button type="submit" fullWidth variant="contained" color="primary">
               ADD

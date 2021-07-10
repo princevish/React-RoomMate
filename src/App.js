@@ -7,7 +7,7 @@ import Search from "./components/Search";
 import Sell from "./components/Sell";
 import Favorite from "./components/Favorite";
 import Profile from "./components/Profile";
-import Chat from "./components/Chat";
+import Notfound from "./components/Notfound";
 import Container from "@material-ui/core/Container";
 import { makeStyles, ThemeProvider } from "@material-ui/core/styles";
 import { CssBaseline, Hidden } from "@material-ui/core";
@@ -48,9 +48,7 @@ function App() {
             <Route exact path="/profile">
               <Profile />
             </Route>
-            <Route path="/chat">
-              <Chat />
-            </Route>
+           
             <Route path="/signin">
               <Signin />
             </Route>
@@ -59,6 +57,9 @@ function App() {
             </Route>
             <Route path="/roomview/:id">
               <Roomview />
+            </Route>
+            <Route>
+              <Notfound />
             </Route>
           </Switch>
         </Container>
