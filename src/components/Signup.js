@@ -89,6 +89,7 @@ export default function Signup() {
         },
       };
       try {
+        setLoad(true);
         const res = await axiosInstance.post(
           "/api/users/signup/",
           formData,
@@ -100,7 +101,7 @@ export default function Signup() {
           push("/");
         }
       } catch (err) {
-        console.log(err);
+        setLoad(false);
         const jsonData = JSON.parse(err.request.response);
         if (jsonData.message) {
           if (jsonData.message[0].msg) {
@@ -109,7 +110,6 @@ export default function Signup() {
           }else{
             setfailed(jsonData.message);
             setOpen(true);
-
           }
         } else {
           setfailed(jsonData.error);
@@ -118,16 +118,19 @@ export default function Signup() {
       }
     } else {
       setError(true);
+      setLoad(false);
     }
   };
   const imgupload = (e) => {
     setImgimg(false);
+    setLoad(false);
     if (e.target.files[0]) {
       let filelen = [];
       const len = e.target.files["length"];
       for (let i = 0; i < len; i++) {
         if (Number(e.target.files[i].size) > 5082746) {
           setImgimg(true);
+          setLoad(false);
         }
         filelen.push(URL.createObjectURL(e.target.files[i]));
       }
@@ -240,6 +243,7 @@ export default function Signup() {
                   style={{ display: "none" }}
                   type="file"
                   onChange={imgupload}
+                  accept="image/*"
                   ref={register({
                     required: "image is required.",
                   })}
@@ -279,7 +283,6 @@ export default function Signup() {
             variant="contained"
             color="primary"
             className={classes.submit}
-            onClick={()=>setLoad(true)}
           >
             Sign Up
           </Button>

@@ -6,7 +6,7 @@ import axiosInstance from "../axios";
 import Item from "../components/inputroom/Roomitem";
 import { TouchBallLoading } from "react-loadingg";
 import { Button } from "@material-ui/core";
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
   Box: {
     margin: "auto",
     padding: "30px",
@@ -18,7 +18,27 @@ const useStyles = makeStyles({
       boxShadow: "0 16px 70px -12.125px rgba(0,0,0,0.3)",
     },
   },
-});
+  name:{
+    fontSize:"20px",
+    [theme.breakpoints.up('sm')]: {
+      fontSize:"2rem"
+    }
+  },
+  email:{
+    fontSize:"15px",
+    [theme.breakpoints.up('sm')]: {
+      fontSize:"20px"
+    }
+  },
+  mobile:{
+    fontSize:"15px",
+    marginBottom:"5px",
+    [theme.breakpoints.up('sm')]: {
+      fontSize:"20px",
+      marginBottom:"10px",
+    }
+  }
+}));
 
 export default function Profile() {
   const classes = useStyles();
@@ -112,11 +132,11 @@ export default function Profile() {
           </Grid>
           <Grid item xs={12} sm={8}>
             <Box style={{ margin: "auto" }}>
-              <Typography variant="h4">{user.name}</Typography>
-              <Typography variant="h5">{user.email}</Typography>
-              <Typography variant="h5">{user.mobile}</Typography>
+              <Typography variant="h4" className={classes.name}>{user.name}</Typography>
+              <Typography variant="h5" className={classes.email}>{user.email}</Typography>
+              <Typography variant="h5" className={classes.mobile}>{user.mobile}</Typography>
             </Box>
-            <Button variant="outlined" color="secondary" onClick={logout}>Signout</Button>
+            <Button variant="outlined"  color="secondary" onClick={logout}>Signout</Button>
           </Grid>
         </Grid>
       )}

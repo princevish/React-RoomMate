@@ -88,6 +88,9 @@ export default function Roomview() {
       {notfound && <Typography variant="h4">Not Found</Typography>}
       {roomState && (
         <Grid container spacing={3}>
+          <Grid xs={12}>
+          <Typography variant="h6">{roomState.name}</Typography>
+          </Grid>
           <Carousel>
             {roomState.images.map((item, i) => (
               <CardMedia key={i}

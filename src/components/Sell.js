@@ -87,13 +87,15 @@ export default function Sell() {
   };
   const imgupload = (e) => {
    
-    setImgimg(false)
+    setImgimg(false);
+  
     if (e.target.files[0]) {
       let filelen = [];
       const len = e.target.files["length"];
       for (let i = 0; i < len; i++) {
         if(Number(e.target.files[i].size) > 5082746){
-            setImgimg(true)
+            setImgimg(true);
+           
         }
         filelen.push(URL.createObjectURL(e.target.files[i]));
       }
@@ -139,6 +141,7 @@ export default function Sell() {
       credentials: "include",
     };
     try {
+      setLoad(true);
       const res = await axiosInstance.post(
         "/api/room/addroom/",
         formData,
@@ -148,10 +151,11 @@ export default function Sell() {
       const data = await res.data;
 
       if (data) {
-        setLoad(false)
+        setLoad(false);
         push("/");
       }
     } catch (err) {
+      setLoad(false);
       console.log(err);
     }
   };
@@ -247,7 +251,6 @@ export default function Sell() {
                   render={(props) => (
                     <Select
                       value={props.value}
-                      defaultValue=""
                       onChange={props.onChange}
                       onClick={handelchange}
                       label="State"
@@ -263,7 +266,6 @@ export default function Sell() {
                   )}
                   name="address.state"
                   control={control}
-                  defaultValue=""
                   rules={{
                     required: "please choose your state.",
                   }}
@@ -376,6 +378,7 @@ export default function Sell() {
                   style={{ display: "none" }}
                   type="file"
                   onChange={imgupload}
+                  accept="image/*"
                   ref={register({
                     required: "image is required.",
                   })}
@@ -403,8 +406,8 @@ export default function Sell() {
               </label>
               {img && <Typography variant="body2" color="secondary"> Photo not allow more then 5MB </Typography>}
             </Grid>
-            <Button type="submit" fullWidth variant="contained" color="primary" onClick={()=>setLoad(true)}>
-              ADD
+            <Button type="submit" fullWidth variant="contained" color="primary">
+              ADD ROOM
             </Button>
           </Grid>
         </form>
