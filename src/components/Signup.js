@@ -74,46 +74,49 @@ export default function Signup() {
 
   const onSubmit = async (data) => {
     if (phone.length === 15) {
-      const { name, email, password, image } = data;
+      if (img === false) {
+        const { name, email, password, image } = data;
 
-      const formData = new FormData();
-      formData.append("image", image[0]);
-      formData.append("name", name);
-      formData.append("email", email);
-      formData.append("password", password);
-      formData.append("mobile", phone);
+        const formData = new FormData();
+        formData.append("image", image[0]);
+        formData.append("name", name);
+        formData.append("email", email);
+        formData.append("password", password);
+        formData.append("mobile", phone);
 
-      const config = {
-        headers: {
-          "content-type": "multipart/form-data",
-        },
-      };
-      try {
-        setLoad(true);
-        const res = await axiosInstance.post(
-          "/api/users/signup/",
-          formData,
-          config
-        );
-        const data = await res.data.user;
-        if (res.status === 201 && data) {
-          setLoad(false)
-          push("/");
-        }
-      } catch (err) {
-        setLoad(false);
-        const jsonData = JSON.parse(err.request.response);
-        if (jsonData.message) {
-          if (jsonData.message[0].msg) {
-            setfailed(jsonData.message[0].msg);
-            setOpen(true);
-          }else{
-            setfailed(jsonData.message);
+        const config = {
+          headers: {
+            "content-type": "multipart/form-data",
+          },
+        };
+        try {
+          setLoad(true);
+          window.scrollTo(0, 0);
+          const res = await axiosInstance.post(
+            "/api/users/signup/",
+            formData,
+            config
+          );
+          const data = await res.data.user;
+          if (res.status === 201 && data) {
+            setLoad(false);
+            push("/");
+          }
+        } catch (err) {
+          setLoad(false);
+          const jsonData = JSON.parse(err.request.response);
+          if (jsonData.message) {
+            if (jsonData.message[0].msg) {
+              setfailed(jsonData.message[0].msg);
+              setOpen(true);
+            } else {
+              setfailed(jsonData.message);
+              setOpen(true);
+            }
+          } else {
+            setfailed(jsonData.error);
             setOpen(true);
           }
-        } else {
-          setfailed(jsonData.error);
-          setOpen(true);
         }
       }
     } else {
@@ -235,7 +238,7 @@ export default function Signup() {
               />
             </Grid>
             <Grid item xs={12}>
-            {load && <WaveTopBottomLoading/>}
+              {load && <WaveTopBottomLoading />}
               <label>
                 <input
                   id="btn-upload"
@@ -271,8 +274,7 @@ export default function Signup() {
               </label>
               {img && (
                 <Typography variant="body2" color="secondary">
-                  {" "}
-                  Photo not allow more then 5MB{" "}
+                  Photo not allow more then 5MB
                 </Typography>
               )}
             </Grid>

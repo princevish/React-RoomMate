@@ -46,7 +46,7 @@ export default function Sell() {
   const [city, setcity] = React.useState([]);
   const [citycode, setCitycode] = React.useState("");
   const [alt, setImg] = React.useState();
-  const [img,setImgimg] =React.useState(false)
+  const [img, setImgimg] = React.useState(false);
   const [load, setLoad] = React.useState(false);
   const { push } = useHistory();
   const classes = useStyles();
@@ -86,77 +86,78 @@ export default function Sell() {
     setCitycode(e.target.value);
   };
   const imgupload = (e) => {
-   
     setImgimg(false);
-  
+
     if (e.target.files[0]) {
       let filelen = [];
       const len = e.target.files["length"];
       for (let i = 0; i < len; i++) {
-        if(Number(e.target.files[i].size) > 5082746){
-            setImgimg(true);
-           
+        if (Number(e.target.files[i].size) > 5082746) {
+          setImgimg(true);
         }
         filelen.push(URL.createObjectURL(e.target.files[i]));
       }
       setImg(filelen);
     }
   };
- 
+
   const onSubmit = async (data) => {
-    const {
-      name,
-      price,
-      address: { add, city, state },
-      facility: { wifi, food, water, electric },
-      details: { bathrooms, rooms, kitchen, parking },
-      description,
-      images,
-    } = data;
+    if (img === false) {
+      const {
+        name,
+        price,
+        address: { add, city, state },
+        facility: { wifi, food, water, electric },
+        details: { bathrooms, rooms, kitchen, parking },
+        description,
+        images,
+      } = data;
 
-    const formData = new FormData();
+      const formData = new FormData();
 
-    formData.append("name", name);
-    formData.append("price", price);
-    formData.append("description", description);
-    formData.append("address[add]", add);
-    formData.append("address[city]", city);
-    formData.append("address[state]", state);
-    formData.append("facility[wifi]", wifi);
-    formData.append("facility[food]", food);
-    formData.append("facility[water]", water);
-    formData.append("facility[electric]", electric);
-    formData.append("details[bathrooms]", bathrooms);
-    formData.append("details[rooms]", rooms);
-    formData.append("details[kitchen]", kitchen);
-    formData.append("details[parking]", parking);
-    for (let i = 0; i < images.length; i++) {
-      formData.append("images", images[i]);
-    }
-
-    const config = {
-      headers: {
-        "content-type": "multipart/form-data",
-      },
-      credentials: "include",
-    };
-    try {
-      setLoad(true);
-      const res = await axiosInstance.post(
-        "/api/room/addroom/",
-        formData,
-        config
-      );
-
-      const data = await res.data;
-
-      if (data) {
-        setLoad(false);
-        push("/");
+      formData.append("name", name);
+      formData.append("price", price);
+      formData.append("description", description);
+      formData.append("address[add]", add);
+      formData.append("address[city]", city);
+      formData.append("address[state]", state);
+      formData.append("facility[wifi]", wifi);
+      formData.append("facility[food]", food);
+      formData.append("facility[water]", water);
+      formData.append("facility[electric]", electric);
+      formData.append("details[bathrooms]", bathrooms);
+      formData.append("details[rooms]", rooms);
+      formData.append("details[kitchen]", kitchen);
+      formData.append("details[parking]", parking);
+      for (let i = 0; i < images.length; i++) {
+        formData.append("images", images[i]);
       }
-    } catch (err) {
-      setLoad(false);
-      console.log(err);
+
+      const config = {
+        headers: {
+          "content-type": "multipart/form-data",
+        },
+        credentials: "include",
+      };
+      try {
+        setLoad(true);
+        window.scrollTo(0, 0);
+        const res = await axiosInstance.post(
+          "/api/room/addroom/",
+          formData,
+          config
+        );
+
+        const data = await res.data;
+
+        if (data) {
+          setLoad(false);
+          push("/");
+        }
+      } catch (err) {
+        setLoad(false);
+        console.log(err);
+      }
     }
   };
 
@@ -370,7 +371,7 @@ export default function Sell() {
               />
             </Grid>
             <Grid item xs={12}>
-              {load && <WaveTopBottomLoading/>}
+              {load && <WaveTopBottomLoading />}
               <label>
                 <input
                   id="btn-upload"
@@ -383,7 +384,7 @@ export default function Sell() {
                     required: "image is required.",
                   })}
                   multiple
-                  error={img ? "true":"false"}
+                  error={img ? "true" : "false"}
                 />
                 <Button
                   className="btn-choose"
@@ -391,7 +392,9 @@ export default function Sell() {
                   variant="outlined"
                   fullWidth
                   component="span"
-                  color={errors.images ? "secondary" : img?"secondary":"default" }
+                  color={
+                    errors.images ? "secondary" : img ? "secondary" : "default"
+                  }
                   startIcon={<CloudUploadIcon />}
                 >
                   {alt
@@ -401,10 +404,14 @@ export default function Sell() {
                     : errors.images
                     ? errors.images?.message
                     : "Image Upload"}
-                   
                 </Button>
               </label>
-              {img && <Typography variant="body2" color="secondary"> Photo not allow more then 5MB </Typography>}
+              {img && (
+                <Typography variant="body2" color="secondary">
+                  {" "}
+                  Photo not allow more then 5MB{" "}
+                </Typography>
+              )}
             </Grid>
             <Button type="submit" fullWidth variant="contained" color="primary">
               ADD ROOM
