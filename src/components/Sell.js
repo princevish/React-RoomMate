@@ -244,6 +244,7 @@ export default function Sell() {
               <FormControl
                 fullWidth
                 variant="outlined"
+                
                 error={Boolean(errors.address?.state)}
               >
                 <InputLabel>State</InputLabel>
@@ -252,6 +253,7 @@ export default function Sell() {
                   render={(props) => (
                     <Select
                       value={props.value}
+                      defaultValue=""
                       onChange={props.onChange}
                       onClick={handelchange}
                       label="State"
@@ -267,6 +269,7 @@ export default function Sell() {
                   )}
                   name="address.state"
                   control={control}
+                  defaultValue=""
                   rules={{
                     required: "please choose your state.",
                   }}

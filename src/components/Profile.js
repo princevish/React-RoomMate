@@ -62,6 +62,7 @@ export default function Profile() {
   const { push } = useHistory();
   const [user, setUser] = React.useState("");
   const [load, setLoad] = React.useState(true);
+  const [rdel, setRdel] = React.useState(false);
 
   const Userdata = async (setroomState, setLoad) => {
     try {
@@ -77,7 +78,6 @@ export default function Profile() {
   };
 
   React.useEffect(() => {
-   
     fetch(
       "/api/auth",
       {
@@ -96,21 +96,34 @@ export default function Profile() {
       .then(function (data) {
         if (!data.id) {
           push("/signup");
-        }else{
-          Userdata(setUser, setLoad);
         }
       });
-   
-     
-
- 
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
+  React.useEffect(() => {
+    Userdata(setUser, setLoad);
+  }, [rdel]);
   const logout = async () => {
     try {
       const res = await axiosInstance.get("/api/users/logout");
       if (res.status === 200) {
         push("/signin");
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  const roomdel = async (id) => {
+    try {
+      const res = await axiosInstance.get(`/api/room/delete/${id}`);
+      if (res.status === 200) {
+        window.scrollTo(0, 0);
+        setLoad(true);
+        if (rdel) {
+          setRdel(false);
+        } else {
+          setRdel(true);
+        }
       }
     } catch (err) {
       console.log(err);
@@ -122,7 +135,7 @@ export default function Profile() {
         return user.user.map((item) => {
           return (
             <Grid item xs={12} sm={6} md={4} lg={3} key={item._id}>
-              <Item item={item} />
+              <Item item={item} ridfun={roomdel} rid={item._id} />
             </Grid>
           );
         });

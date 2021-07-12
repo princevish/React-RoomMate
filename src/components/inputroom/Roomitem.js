@@ -20,7 +20,7 @@ import ShareIcon from "@material-ui/icons/Share";
 import React, { useEffect, useState } from "react";
 import axiosInstance from "../../axios";
 import { useHistory } from "react-router-dom";
-
+import CancelIcon from "@material-ui/icons/Cancel";
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
@@ -49,7 +49,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Item({ item }) {
+export default function Item({ item,ridfun, rid }) {
   const classes = useStyles();
   const [fav, setFav] = useState(false);
   const [uf, setUf] = useState("");
@@ -102,20 +102,27 @@ export default function Item({ item }) {
   return (
     <Card className={classes.card}>
       <CardHeader
-        avatar={
-          <Avatar
-            aria-label="profile"
-            src={ item.users.image}
-          ></Avatar>
-        }
+        avatar={<Avatar aria-label="profile" src={item.users.image}></Avatar>}
         action={
-          <IconButton aria-label="favorite" onClick={() => handleFav(item._id)}>
-            {fav ? (
-              <FavoriteIcon color="secondary" />
-            ) : (
-              <FavoriteBorderOutlinedIcon color="secondary" />
-            )}
-          </IconButton>
+          rid ? (
+            <IconButton
+              aria-label="favorite"
+              onClick={() => ridfun(item._id)}
+            >
+              <CancelIcon color="secondary" />
+            </IconButton>
+          ) : (
+            <IconButton
+              aria-label="favorite"
+              onClick={() => handleFav(item._id)}
+            >
+              {fav ? (
+                <FavoriteIcon color="secondary" />
+              ) : (
+                <FavoriteBorderOutlinedIcon color="secondary" />
+              )}
+            </IconButton>
+          )
         }
         title={item.name}
         subheader={`${item.address.city},${item.address.state}`}
