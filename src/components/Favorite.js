@@ -18,7 +18,7 @@ const useStyles = makeStyles((theme) => ({
 export default function Favorite() {
   const [roomstate, setroomState] = useState(false);
   const [load, setLoad] = useState(true);
-
+ 
   const Fav = ({ items }) => {
     return items.map((item) => {
       return (
@@ -28,22 +28,23 @@ export default function Favorite() {
       );
     });
   };
-  const roomdata = async (setroomState) => {
-    try {
-      const res = await axiosInstance.get("/api/users/fav");
-      const allPosts = await res.data;
-      setroomState(allPosts.data.fav);
-      if(Boolean(allPosts.data.fav.length)){
-      setLoad(false)
-      }
-     
-    } catch (err) {
-      console.log(err);
-    }
-  };
+
   useEffect(() => {
+    const roomdata = async (setroomState) => {
+      try {
+        const res = await axiosInstance.get("/api/users/fav");
+        const allPosts = await res.data;
+        setroomState(allPosts.data.fav);
+        if(Boolean(allPosts.data.fav.length)){
+        setLoad(false)
+        }
+       
+      } catch (err) {
+        console.log(err);
+      }
+    };
     roomdata(setroomState);
-  }, []);
+  }, [load]);
   
   const classes = useStyles();
 

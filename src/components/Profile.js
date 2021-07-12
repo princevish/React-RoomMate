@@ -18,26 +18,43 @@ const useStyles = makeStyles((theme) => ({
       boxShadow: "0 16px 70px -12.125px rgba(0,0,0,0.3)",
     },
   },
-  name:{
-    fontSize:"20px",
-    [theme.breakpoints.up('sm')]: {
-      fontSize:"2rem"
-    }
+  image: {
+    borderRadius: "50%",
+    height: "200px",
+    width: "200px",
+    justifyContent: "center",
+    margin: "auto",
   },
-  email:{
-    fontSize:"15px",
-    [theme.breakpoints.up('sm')]: {
-      fontSize:"20px"
-    }
+  name: {
+    fontSize: "20px",
+    marginBottom: "5px",
+    [theme.breakpoints.up("sm")]: {
+      fontSize: "2rem",
+      marginBottom: "10px",
+    },
   },
-  mobile:{
-    fontSize:"15px",
-    marginBottom:"5px",
-    [theme.breakpoints.up('sm')]: {
-      fontSize:"20px",
-      marginBottom:"10px",
-    }
-  }
+  email: {
+    fontSize: "15px",
+    [theme.breakpoints.up("sm")]: {
+      fontSize: "20px",
+    },
+  },
+  mobile: {
+    fontSize: "15px",
+    marginBottom: "10px",
+    [theme.breakpoints.up("sm")]: {
+      fontSize: "20px",
+      marginBottom: "10px",
+    },
+  },
+  info: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    [theme.breakpoints.up("sm")]: {
+      display: "block",
+    },
+  },
 }));
 
 export default function Profile() {
@@ -45,6 +62,7 @@ export default function Profile() {
   const { push } = useHistory();
   const [user, setUser] = React.useState("");
   const [load, setLoad] = React.useState(true);
+
   const Userdata = async (setroomState, setLoad) => {
     try {
       const res = await axiosInstance.get("/api/users/list");
@@ -55,9 +73,11 @@ export default function Profile() {
     } catch (err) {
       console.log(err);
     }
+    return null;
   };
+
   React.useEffect(() => {
-    Userdata(setUser, setLoad);
+   
     fetch(
       "/api/auth",
       {
@@ -76,20 +96,26 @@ export default function Profile() {
       .then(function (data) {
         if (!data.id) {
           push("/signup");
+        }else{
+          Userdata(setUser, setLoad);
         }
       });
+   
+     
+
+ 
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const logout=async()=>{
+  const logout = async () => {
     try {
       const res = await axiosInstance.get("/api/users/logout");
-      if(res.status===200){
-      push('/signin')
+      if (res.status === 200) {
+        push("/signin");
       }
     } catch (err) {
       console.log(err);
     }
-  }
+  };
   const Roomitem = (user) => {
     if (user.user) {
       if (user.user.length !== 0) {
@@ -120,23 +146,25 @@ export default function Profile() {
               component="img"
               alt="Profile image"
               height="300px"
-              style={{
-                borderRadius: "50%",
-                height: "200px",
-                width: "200px",
-                justifyContent: "center",
-                margin: "auto",
-              }}
+              className={classes.image}
               image={user.image}
             />
           </Grid>
           <Grid item xs={12} sm={8}>
-            <Box style={{ margin: "auto" }}>
-              <Typography variant="h4" className={classes.name}>{user.name}</Typography>
-              <Typography variant="h5" className={classes.email}>{user.email}</Typography>
-              <Typography variant="h5" className={classes.mobile}>{user.mobile}</Typography>
+            <Box className={classes.info}>
+              <Typography variant="h4" className={classes.name}>
+                {user.name}
+              </Typography>
+              <Typography variant="h5" className={classes.email}>
+                {user.email}
+              </Typography>
+              <Typography variant="h5" className={classes.mobile}>
+                {user.mobile}
+              </Typography>
+              <Button variant="outlined" color="secondary" onClick={logout}>
+                Signout
+              </Button>
             </Box>
-            <Button variant="outlined"  color="secondary" onClick={logout}>Signout</Button>
           </Grid>
         </Grid>
       )}

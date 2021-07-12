@@ -48,7 +48,6 @@ export default function NavBottom() {
     <BottomNavigation
       value={value}
       onChange={handleChange}
-      bgcolor="secondary"
       className={classes.root}
     >
       <BottomNavigationAction

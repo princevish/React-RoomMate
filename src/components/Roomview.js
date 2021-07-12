@@ -15,7 +15,8 @@ import WifiIcon from "@material-ui/icons/Wifi";
 import FlashOnIcon from "@material-ui/icons/FlashOn";
 import LocalDrinkIcon from "@material-ui/icons/LocalDrink";
 import { PointSpreadLoading } from "react-loadingg";
-const useStyles = makeStyles({
+import { Button } from "@material-ui/core";
+const useStyles = makeStyles((theme) => ({
   Box: {
     margin: "auto",
     padding: "30px",
@@ -29,10 +30,17 @@ const useStyles = makeStyles({
   },
   image: {
     borderRadius: "50%",
+    height: "6rem",
+    width: "6rem",
+    justifyContent: "center",
+    margin: "auto",
+    [theme.breakpoints.up('sm')]: {
+      borderRadius: "50%",
     height: "10rem",
     width: "10rem",
     justifyContent: "center",
     margin: "auto",
+     }
   },
   imgroom: {
     borderRadius: "2%",
@@ -45,8 +53,10 @@ const useStyles = makeStyles({
     alignContent: "center",
     justifyContent: "space-around",
   },
-  details: {
-    flexGrow: "1",
+  detail: {
+    display:"flex",
+    backgroundColor:"#2196f3",
+    color:"white",
     alignContent: "center",
     justifyContent: "space-around",
     borderRadius: "15px",
@@ -55,8 +65,17 @@ const useStyles = makeStyles({
     "&:hover": {
       boxShadow: "0 16px 70px -12.125px rgba(0,0,0,0.3)",
     },
+    marginBottom:"1rem"
   },
-});
+  info:{
+    display:"flex",
+    flexDirection: "column",
+    alignItems: "center",
+    [theme.breakpoints.up('sm')]: {
+     display:"block"
+    }
+  }
+}));
 
 const roomdata = async (setroomState, params, setNotfound,setLoad) => {
   try {
@@ -82,14 +101,16 @@ export default function Roomview() {
   useEffect(() => {
     roomdata(setroomState, id, setNotfound,setLoad);
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  const simulateCall = () => window.open(`tel:${roomState.users.mobile}`, '_self');
   return (
     <Box className={roomState? classes.Box : ""} maxWidth="xs">
        {load && <PointSpreadLoading />}
       {notfound && <Typography variant="h4">Not Found</Typography>}
       {roomState && (
         <Grid container spacing={3}>
-          <Grid xs={12}>
-          <Typography variant="h6">{roomState.name}</Typography>
+          <Grid item xs={12}>
+          <Typography variant="h6" >{roomState.name}</Typography>
           </Grid>
           <Carousel>
             {roomState.images.map((item, i) => (
@@ -118,29 +139,29 @@ export default function Roomview() {
               />
             </CardContent>
           </Grid>
-          <Grid container xm={12}>
+          <Grid container xm={12}  >
             <Grid item xs={6} sm={3} className={classes.detail}>
-              <Typography variant="h6">
+              <Typography variant="subtitle1">
                 {roomState.details.rooms || 0} Room
               </Typography>
             </Grid>
             <Grid item xs={6} sm={3} className={classes.detail}>
-              <Typography variant="h6">
+              <Typography variant="subtitle1">
                 {roomState.details.bathrooms || 0} Bathroom
               </Typography>
             </Grid>
             <Grid item xs={6} sm={3} className={classes.detail}>
-              <Typography variant="h6">
+              <Typography variant="subtitle1">
                 {roomState.details.kitchen || 0} Kitchen
               </Typography>
             </Grid>
             <Grid item xs={6} sm={3} className={classes.detail}>
-              <Typography variant="h6">
+              <Typography variant="subtitle1">
                 {roomState.details.parking || 0} Parking
               </Typography>
             </Grid>
           </Grid>
-          <Grid item xs={12} sm={4}>
+          <Grid item xs={12} sm={4} >
             <CardMedia
               component="img"
               alt="Profile image"
@@ -150,24 +171,20 @@ export default function Roomview() {
           </Grid>
 
           <Grid item xs={12} sm={8}>
-            <Box style={{ margin: "auto", fontSize: "4rem" }}>
+            <Box className={classes.info}>
               <Typography variant="h6">{roomState.users.name}</Typography>
-              <Typography variant="subtitle1">
-                {roomState.users.email}
-              </Typography>
+              <Typography variant="subtitle1">{roomState.users.email}</Typography>
               <Typography variant="body1">{roomState.users.mobile}</Typography>
+              <Button variant="outlined" style={{marginTop:"10px"}} color="primary" onClick={simulateCall}> Call Me</Button>
             </Box>
           </Grid>
           <Grid item xs={12} sm={12}>
             <Typography variant="h6">Address</Typography>
-          </Grid>
-          <Grid item xs={12} sm={12}>
             <Typography variant="body1">{roomState.address.add}, {roomState.address.city},{roomState.address.state}</Typography>
           </Grid>
+      
           <Grid item xs={12} sm={12}>
             <Typography variant="h6">Description</Typography>
-          </Grid>
-          <Grid item xs={12} sm={12}>
             <Typography variant="body1">{roomState.description}</Typography>
           </Grid>
         </Grid>

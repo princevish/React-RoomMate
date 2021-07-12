@@ -17,17 +17,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const roomdata = async (setroomState, roomnum, setLoad) => {
-  try {
-    const res = await axiosInstance.get(`/api/room/${roomnum}`);
-    const allPosts = await res.data;
 
-    setroomState(allPosts.data);
-    setLoad(false);
-  } catch (err) {
-    console.log(err);
-  }
-};
 
 export default function Room() {
   const [roomState, setroomState] = useState([]);
@@ -35,6 +25,17 @@ export default function Room() {
   const [load, setLoad] = useState(true);
 
   useEffect(() => {
+    const roomdata = async (setroomState, roomnum, setLoad) => {
+      try {
+        const res = await axiosInstance.get(`/api/room/${roomnum}`);
+        const allPosts = await res.data;
+    
+        setroomState(allPosts.data);
+        setLoad(false);
+      } catch (err) {
+        console.log(err);
+      }
+    };
     roomdata(setroomState, roomnum, setLoad);
   }, [roomnum]);
 

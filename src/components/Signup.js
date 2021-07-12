@@ -265,7 +265,7 @@ export default function Signup() {
                   ) : errors.images ? (
                     errors.images?.message
                   ) : (
-                    "upload"
+                    "Profile Image"
                   )}
                 </Button>
               </label>

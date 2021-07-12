@@ -400,7 +400,7 @@ export default function Sell() {
                       ))
                     : errors.images
                     ? errors.images?.message
-                    : "upload"}
+                    : "Image Upload"}
                    
                 </Button>
               </label>
