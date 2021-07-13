@@ -154,7 +154,7 @@ export default function Signin() {
             Signin
           </Button>
         </form>
-        <Grid container justifyContent="space-between">
+        <Grid container style={{justifyContent:"space-between"}}>
         <Grid item>
             <Link
               component="button"
@@ -162,6 +162,8 @@ export default function Signin() {
               onClick={() => {
                 push("/forget-password");
               }}
+              color="secondary"
+             style={{marginBottom:"10px"}}
             >
               Forget Password ?
             </Link>
