@@ -12,7 +12,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import { useForm } from "react-hook-form";
 import { useHistory } from "react-router-dom";
-import axiosInstance from "../axios";
+import axiosInstance from "../../axios";
 import CloseIcon from "@material-ui/icons/Close";
 import IconButton from "@material-ui/core/IconButton";
 import Alert from "@material-ui/lab/Alert";
@@ -48,7 +48,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Signin() {
+export default function Checkmail() {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
   const [failed, setfailed] = React.useState("");
@@ -57,24 +57,19 @@ export default function Signin() {
 
   const onSubmit = async (data) => {
     const dataform = JSON.stringify(data);
+    setOpen(false);
     try {
-      const res = await axiosInstance.post("/api/users/signin/", dataform);
-
-      const datares = await res.data;
-      if (res.status === 202 && datares) {
-        push("/");
+      const res = await axiosInstance.post("/api/users/forget-password", dataform);
+      if (res.status === 200 ) {
+        setfailed(res.data.message);
+        setOpen(true);
       }
     } catch (err) {
       console.log(err);
       const jsonData = JSON.parse(err.request.response);
-
-      if (jsonData.message[0].msg) {
-        setfailed(jsonData.message[0].msg);
-        setOpen(true);
-      } else {
         setfailed(jsonData.message);
         setOpen(true);
-      }
+  
     }
   };
 
@@ -85,7 +80,7 @@ export default function Signin() {
           <LockOutlinedIcon />
         </Avatar>
         <Typography component="h1" variant="h5">
-          Signin
+         Forget Password
         </Typography>
 
         <form className={classes.form} onSubmit={handleSubmit(onSubmit)}>
@@ -128,21 +123,8 @@ export default function Signin() {
               />
             </Grid>
 
-            <Grid item xs={12}>
-              <TextField
-                placeholder="Enter Your Password"
-                label="Password"
-                variant="outlined"
-                fullWidth
-                name="password"
-                inputRef={register({
-                  required: "Password is required.",
-                })}
-                error={Boolean(errors.password)}
-                helperText={errors.password?.message}
-                type="password"
-              />
-            </Grid>
+           
+            
           </Grid>
           <Button
             type="submit"
@@ -151,21 +133,10 @@ export default function Signin() {
             color="primary"
             className={classes.submit}
           >
-            Signin
+            Forget Password
           </Button>
         </form>
-        <Grid container justifyContent="space-between">
-        <Grid item>
-            <Link
-              component="button"
-              variant="body2"
-              onClick={() => {
-                push("/forget-password");
-              }}
-            >
-              Forget Password ?
-            </Link>
-          </Grid>
+        <Grid container justify="flex-end">
           <Grid item>
             <Link
               component="button"

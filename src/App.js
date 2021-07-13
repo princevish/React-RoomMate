@@ -15,7 +15,8 @@ import Theme from "./components/Theme";
 import Signin from "./components/Signin";
 import Signup from "./components/Signup";
 import Roomview from "./components/Roomview";
-
+import Checkmail from './components/Forget/Checkmail'
+import Setpassword from './components/Forget/Setpassword'
 const useStyles = makeStyles((theme) => ({
   root: {
     marginTop: theme.spacing(10),
@@ -57,6 +58,12 @@ function App() {
             </Route>
             <Route path="/roomview/:id">
               <Roomview />
+            </Route>
+            <Route exact path="/forget-password">
+              <Checkmail />
+            </Route>
+            <Route path="/forget-password/:id/:token">
+              <Setpassword />
             </Route>
             <Route>
               <Notfound />
