@@ -6,16 +6,21 @@ import axiosInstance from "../axios";
 import Item from "../components/inputroom/Roomitem";
 import { TouchBallLoading } from "react-loadingg";
 import { Button } from "@material-ui/core";
+import {Helmet} from "react-helmet";
 const useStyles = makeStyles((theme) => ({
+  root:{  minHeight: "80vh"},
   Box: {
     margin: "auto",
     padding: "30px",
-    maxWidth: "1000px",
+    maxWidth: "1200px",
     borderRadius: "15px",
     transition: "0.3s",
     boxShadow: "0 8px 40px -12px rgba(0,0,0,0.3)",
     "&:hover": {
       boxShadow: "0 16px 70px -12.125px rgba(0,0,0,0.3)",
+    },
+    [theme.breakpoints.down("sm")]: {
+      padding: "0px",
     },
   },
   image: {
@@ -87,21 +92,25 @@ export default function Profile() {
           "Content-Type": "application/json",
         },
         credentials: "include",
-      },
-      {}
-    )
-      .then(function (response) {
+      }
+    ).then(function (response) {
+
         return response.json();
-      })
-      .then(function (data) {
+      }).then(function (data) {
         if (!data.id) {
           push("/signup");
         }
       });
+      return () => {
+        console.log("unmount");
+      };
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   React.useEffect(() => {
     Userdata(setUser, setLoad);
+    return () => {
+      console.log("unmount");
+    };
   }, [rdel]);
   const logout = async () => {
     try {
@@ -134,15 +143,15 @@ export default function Profile() {
       if (user.user.length !== 0) {
         return user.user.map((item) => {
           return (
-            <Grid item xs={12} sm={6} md={4} lg={3} key={item._id}>
+            <Grid item xs={12} sm={6} md={4}  key={item._id}>
               <Item item={item} ridfun={roomdel} rid={item._id} />
             </Grid>
           );
         });
       }
       return (
-        <Typography variant="h4" component="h4" style={{ margin: "auto" }}>
-          Not room found
+        <Typography variant="h5"  style={{ margin: "auto" }}>
+          Not Create Room 
         </Typography>
       );
     }
@@ -150,10 +159,16 @@ export default function Profile() {
   };
 
   return (
-    <Box className={user ? classes.Box : ""} maxWidth="xs">
+    <Box className={user ? classes.Box : classes.root} maxWidth="xs">
+      
       {load && <TouchBallLoading />}
       {user && (
         <Grid container spacing={3}>
+          <Helmet>
+       ( <title>{user.name} of RoomMate For Best Room Rental : RoomMate</title>)
+        <meta name="description" content="An Online Room Rental System will provide the Information
+about Rooms/Flats/Houses which is available for Rent" />
+    </Helmet>
           <Grid item xs={12} sm={4}>
             <CardMedia
               component="img"

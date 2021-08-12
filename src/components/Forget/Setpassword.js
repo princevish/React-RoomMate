@@ -17,6 +17,7 @@ import CloseIcon from "@material-ui/icons/Close";
 import IconButton from "@material-ui/core/IconButton";
 import Alert from "@material-ui/lab/Alert";
 import { TouchBallLoading } from "react-loadingg";
+import {Helmet} from "react-helmet";
 const useStyles = makeStyles((theme) => ({
   Box: {
     margin: "auto",
@@ -115,6 +116,11 @@ export default function Setpassword() {
 
   return (
     <Box className={classes.Box} maxWidth="xs">
+      <Helmet>
+        <title>Set Password in RoomMate For Best Room Rental : RoomMate</title>
+        <meta name="description" content="An Online Room Rental System will provide the Information
+about Rooms/Flats/Houses which is available for Rent" />
+    </Helmet>
       {load && <TouchBallLoading />}
       {verifylink && (
         <Box className={classes.paper} p={5}>

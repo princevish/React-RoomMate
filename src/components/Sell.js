@@ -15,7 +15,7 @@ import {
   MenuItem,
   FormHelperText,
 } from "@material-ui/core";
-
+import {Helmet} from "react-helmet";
 import { useForm, Controller } from "react-hook-form";
 import PriceInputs from "./inputroom/inputprice";
 import { useHistory } from "react-router-dom";
@@ -28,7 +28,7 @@ const useStyles = makeStyles({
   Box: {
     margin: "auto",
     padding: "30px",
-    maxWidth: "500px",
+    maxWidth: "800px",
     borderRadius: "15px",
     transition: "0.3s",
     boxShadow: "0 8px 40px -12px rgba(0,0,0,0.3)",
@@ -75,15 +75,22 @@ export default function Sell() {
           push("/signup");
         }
       });
+      return () => {
+        console.log("unmount");
+      };
   }, [push]);
   React.useEffect(() => {
     const state = City.getCitiesOfState("IN", citycode);
     setcity(state);
+    return () => {
+      console.log("unmount");
+    };
   }, [citycode]);
 
   const { register, handleSubmit, control, errors } = useForm();
   const handelchange = (e) => {
     setCitycode(e.target.value);
+    setcity("");
   };
   const imgupload = (e) => {
     setImgimg(false);
@@ -100,8 +107,9 @@ export default function Sell() {
       setImg(filelen);
     }
   };
-
+ 
   const onSubmit = async (data) => {
+
     if (img === false) {
       const {
         name,
@@ -111,8 +119,10 @@ export default function Sell() {
         details: { bathrooms, rooms, kitchen, parking },
         description,
         images,
+        type,
+        onlyfor
       } = data;
-
+       
       const formData = new FormData();
 
       formData.append("name", name);
@@ -129,6 +139,8 @@ export default function Sell() {
       formData.append("details[rooms]", rooms);
       formData.append("details[kitchen]", kitchen);
       formData.append("details[parking]", parking);
+      formData.append("type", type);
+      formData.append("onlyfor", onlyfor);
       for (let i = 0; i < images.length; i++) {
         formData.append("images", images[i]);
       }
@@ -163,13 +175,19 @@ export default function Sell() {
 
   return (
     <React.Fragment>
+
       <Box className={classes.Box} maxWidth="xs">
-        <Typography variant="h4" className={classes.Typography}>
+      <Helmet>
+        <title>ADD Room in RoomMate For Best Room Rental : RoomMate</title>
+        <meta name="description" content="An Online Room Rental System will provide the Information
+about Rooms/Flats/Houses which is available for Rent" />
+    </Helmet>
+        <Typography variant="h5" className={classes.Typography}>
           ADD ROOM
         </Typography>
         <form onSubmit={handleSubmit(onSubmit)}>
           <Grid container spacing={3}>
-            <Grid item xs={12} sm={6}>
+            <Grid item xs={12} sm={4}>
               <TextField
                 placeholder="Enter Your Password"
                 label="Name"
@@ -183,24 +201,66 @@ export default function Sell() {
                 helperText={errors.name?.message}
               />
             </Grid>
-            <Grid item xs={12} sm={6}>
+            <Grid item xs={12} sm={4}>
               <PriceInputs refprice={register} err={errors} />
             </Grid>
-            <Grid item xs={12}>
+            
+            <Grid item xs={12} sm={4} >
+              <FormControl
+                fullWidth
+                variant="outlined"
+                
+                error={Boolean(errors?.type)}
+              >
+                <InputLabel>Type</InputLabel>
+
+                <Controller
+                  render={(props) => (
+                    <Select
+                      value={props.value}
+                      defaultValue=""
+                     
+                      onChange={props.onChange}
+                    
+                      label="Type"
+                    >
+                      
+                          <MenuItem value="Room">Room</MenuItem>
+                          <MenuItem value="Hostel">Hostel</MenuItem>
+                          <MenuItem value="PG">PG</MenuItem>
+                          <MenuItem value="Partner">Partner</MenuItem>
+                       
+                    </Select>
+                  )}
+                  name="type"
+                  control={control}
+                  defaultValue=""
+                  rules={{
+                    required: "Please select Room type.",
+                  }}
+                />
+                <FormHelperText>
+                  {errors.type?.message}
+                </FormHelperText>
+              </FormControl>
+            </Grid>
+
+
+            <Grid item xs={12} sm={4}>
               <TextField
                 placeholder="Enter Your Address"
-                label="address"
+                label="Address"
                 variant="outlined"
                 fullWidth
                 name="address.add"
                 inputRef={register({
-                  required: "address is required.",
+                  required: "Address is required.",
                 })}
                 error={Boolean(errors.address?.add)}
                 helperText={errors.address?.add?.message}
               />
             </Grid>
-            <Grid item xs={12} sm={6}>
+            <Grid item xs={12} sm={4}>
               <FormControl
                 fullWidth
                 variant="outlined"
@@ -240,7 +300,7 @@ export default function Sell() {
               </FormControl>
             </Grid>
 
-            <Grid item xs={12} sm={6}>
+            <Grid item xs={12} sm={4}>
               <FormControl
                 fullWidth
                 variant="outlined"
@@ -280,7 +340,7 @@ export default function Sell() {
               </FormControl>
             </Grid>
 
-            <Grid item xs={12}>
+            <Grid item xs={12} sm={6}>
               <FormControl component="fieldset">
                 <FormLabel component="legend">Facility</FormLabel>
                 <FormGroup row>
@@ -312,6 +372,42 @@ export default function Sell() {
                     label="Water"
                   />
                 </FormGroup>
+              </FormControl>
+            </Grid>
+            <Grid item xs={12} sm={6} >
+              <FormControl
+                fullWidth
+                variant="outlined"
+                error={Boolean(errors?.onlyfor)}
+              >
+                <InputLabel>For</InputLabel>
+
+                <Controller
+                  render={(props) => (
+                    <Select
+                      value={props.value}
+                      defaultValue=""
+                      onChange={props.onChange}
+                      label="For"
+                    >
+                      
+                          <MenuItem value="Boys">Boys</MenuItem>
+                          <MenuItem value="Girls">Girls</MenuItem>
+                          <MenuItem value="Boys & Girls">Boys & Girls</MenuItem>
+                         
+                       
+                    </Select>
+                  )}
+                  name="onlyfor"
+                  control={control}
+                  defaultValue=""
+                  rules={{
+                    required: "Please Select For .",
+                  }}
+                />
+                <FormHelperText>
+                  {errors.onlyfor?.message}
+                </FormHelperText>
               </FormControl>
             </Grid>
             <Grid item xs={6} sm={3}>
@@ -411,7 +507,6 @@ export default function Sell() {
               </label>
               {img && (
                 <Typography variant="body2" color="secondary">
-                  {" "}
                   Photo not allow more then 5MB{" "}
                 </Typography>
               )}

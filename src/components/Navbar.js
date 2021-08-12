@@ -6,6 +6,8 @@ import { BottomNavigation, BottomNavigationAction } from "@material-ui/core";
 import HomeIcon from "@material-ui/icons/Home";
 import SearchIcon from "@material-ui/icons/Search";
 import FavoriteIcon from "@material-ui/icons/Favorite";
+import IconButton from '@material-ui/core/IconButton';
+import ChatIcon from '@material-ui/icons/Chat';
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 import AddCircleOutlinedIcon from "@material-ui/icons/AddCircleOutlined";
 const useStyles = makeStyles((theme) => ({
@@ -88,8 +90,21 @@ export default function ButtonAppBar() {
               value="Profile"
               icon={<AccountCircleIcon />}
             />
+
+            
           </BottomNavigation>
+          
         </Hidden>
+        <IconButton
+                aria-label="chat of current user"
+                aria-controls="menu-appbar"
+                aria-haspopup="true"
+                component={Link}
+                to="../chatlist"
+                color="inherit"
+              >
+                <ChatIcon />
+              </IconButton>
       </Toolbar>
     </AppBar>
   );

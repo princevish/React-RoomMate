@@ -16,10 +16,11 @@ import axiosInstance from "../axios";
 import CloseIcon from "@material-ui/icons/Close";
 import IconButton from "@material-ui/core/IconButton";
 import Alert from "@material-ui/lab/Alert";
-
+import {Helmet} from "react-helmet";
 const useStyles = makeStyles((theme) => ({
   Box: {
     margin: "auto",
+    minHeight: "80vh"
   },
   paper: {
     marginTop: theme.spacing(10),
@@ -80,12 +81,17 @@ export default function Signin() {
 
   return (
     <Box className={classes.Box} maxWidth="xs">
+      <Helmet>
+        <title>SignIn in RoomMate For Best Room Rental : RoomMate</title>
+        <meta name="description" content="An Online Room Rental System will provide the Information
+about Rooms/Flats/Houses which is available for Rent" />
+    </Helmet>
       <Box className={classes.paper} p={5}>
         <Avatar className={classes.avatar}>
           <LockOutlinedIcon />
         </Avatar>
         <Typography component="h1" variant="h5">
-          Signin
+          SignIn
         </Typography>
 
         <form className={classes.form} onSubmit={handleSubmit(onSubmit)}>

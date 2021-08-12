@@ -1,77 +1,105 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import Item from "../components/inputroom/Roomitem";
-import { Grid } from "@material-ui/core";
-import axiosInstance from "../axios";
-import { Button } from "@material-ui/core";
-import { PointSpreadLoading } from "react-loadingg";
 
+import { AppBar,Tabs,Tab} from "@material-ui/core";
+
+import PropTypes from 'prop-types';
+import {Helmet} from "react-helmet";
+import LocationCityIcon from '@material-ui/icons/LocationCity';
+import AssignmentIndIcon from '@material-ui/icons/AssignmentInd';
+import PeopleAltIcon from '@material-ui/icons/PeopleAlt';
+import HomeIcon from '@material-ui/icons/Home';
+import Rooms from "./Rooms"
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
     marginTop: "2rem",
-  },
-  btn: {
-    display: "flex",
-    margin: "1rem auto",
-  },
+    Height:"100vh",
+    minHeight: "80vh"
+  }
 }));
 
 
+function TabPanel(props) {
+  const { children, value, index, ...other } = props;
+
+  return (
+    <div
+      role="tabpanel"
+      hidden={value !== index}
+      id={`scrollable-force-tabpanel-${index}`}
+      aria-labelledby={`scrollable-force-tab-${index}`}
+      {...other}
+    >
+      {value === index && (children)}
+    </div>
+  );
+}
+
+TabPanel.propTypes = {
+  children: PropTypes.node,
+  index: PropTypes.any.isRequired,
+  value: PropTypes.any.isRequired,
+};
+
+function a11yProps(index) {
+  return {
+    id: `scrollable-force-tab-${index}`,
+    'aria-controls': `scrollable-force-tabpanel-${index}`,
+  };
+}
+
 
 export default function Room() {
-  const [roomState, setroomState] = useState([]);
-  const [roomnum, setRoomnum] = useState(8);
-  const [load, setLoad] = useState(true);
+  
+  const [value, setValue] = React.useState(0);
 
-  useEffect(() => {
-    const roomdata = async (setroomState, roomnum, setLoad) => {
-      try {
-        const res = await axiosInstance.get(`/api/room/${roomnum}`);
-        const allPosts = await res.data;
-    
-        setroomState(allPosts.data);
-        setLoad(false);
-      } catch (err) {
-        console.log(err);
-      }
-    };
-    roomdata(setroomState, roomnum, setLoad);
-  }, [roomnum]);
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+  };
+
+  
 
   const classes = useStyles();
 
-  const room = roomState.map((item) => {
-    return (
-      <Grid item xs={12} sm={6} md={4} lg={3} key={item._id}>
-        <Item item={item} />
-      </Grid>
-    );
-  });
-
-  const handleclick = () => {
-    setLoad(true);
-    setRoomnum((prevState) => {
-      return prevState + 8;
-    });
-  };
 
   return (
     <div className={classes.root}>
-      {load && <PointSpreadLoading />}
-      <Grid container spacing={2}>
-        {room}
-      </Grid>
-      {Boolean(roomState.length) && (
-        <Button
-          onClick={handleclick}
-          color="primary"
-          variant="outlined"
-          className={classes.btn}
+      <Helmet>
+        <title> RoomMate For Best Room Rental in India : RoomMate</title>
+        <meta name="description" content="An Online Room Rental System will provide the Information
+about Rooms/Flats/Houses which is available for Rent" />
+    </Helmet>
+      <AppBar position="static" color="default" style={{marginBottom: "1.5rem"}}>
+        <Tabs
+          value={value}
+          onChange={handleChange}
+          variant="fullWidth"
+          scrollButtons="on"
+          indicatorColor="primary"
+          textColor="primary"
+          aria-label="scrollable force tabs example"
         >
-          Load More
-        </Button>
-      )}
+          <Tab label="Room" icon={<HomeIcon />} {...a11yProps(0)} />
+          <Tab label="Hostel" icon={<LocationCityIcon />} {...a11yProps(1)} />
+          <Tab label="PG" icon={<AssignmentIndIcon />} {...a11yProps(2)} />
+          <Tab label="Patner" icon={<PeopleAltIcon />} {...a11yProps(3)} />
+         
+        </Tabs>
+      </AppBar>
+      <TabPanel value={value} index={0}>
+       <Rooms type={"Room"}/>
+      </TabPanel>
+      <TabPanel value={value} index={1}>
+      <Rooms type={"Hostel"}/>
+      </TabPanel>
+      <TabPanel value={value} index={2}>
+      <Rooms type={"PG"}/>
+      </TabPanel>
+      <TabPanel value={value} index={3}>
+      <Rooms type={"Partner"}/>
+      </TabPanel>
+
     </div>
   );
 }

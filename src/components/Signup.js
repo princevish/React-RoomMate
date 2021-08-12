@@ -19,9 +19,11 @@ import Alert from "@material-ui/lab/Alert";
 import MuiPhoneNumber from "material-ui-phone-number";
 import CloudUploadIcon from "@material-ui/icons/CloudUpload";
 import { WaveTopBottomLoading } from "react-loadingg";
+import {Helmet} from "react-helmet";
 const useStyles = makeStyles((theme) => ({
   Box: {
     margin: "auto",
+    minHeight: "80vh"
   },
   paper: {
     marginTop: theme.spacing(10),
@@ -103,8 +105,10 @@ export default function Signup() {
             push("/");
           }
         } catch (err) {
+          console.log(err)
           setLoad(false);
           const jsonData = JSON.parse(err.request.response);
+          console.log(jsonData.message)
           if (jsonData.message) {
             if (jsonData.message[0].msg) {
               setfailed(jsonData.message[0].msg);
@@ -143,12 +147,17 @@ export default function Signup() {
 
   return (
     <Box className={classes.Box} maxWidth="xs">
+       <Helmet>
+        <title>SignUp in RoomMate For Best Room Rental : RoomMate</title>
+        <meta name="description" content="An Online Room Rental System will provide the Information
+about Rooms/Flats/Houses which is available for Rent" />
+    </Helmet>
       <Box className={classes.paper} p={5}>
         <Avatar className={classes.avatar}>
           <LockOutlinedIcon />
         </Avatar>
         <Typography component="h1" variant="h5">
-          Sign up
+          SignUp
         </Typography>
 
         <form className={classes.form} onSubmit={handleSubmit(onSubmit)}>
@@ -289,7 +298,7 @@ export default function Signup() {
             Sign Up
           </Button>
         </form>
-        <Grid container justify="flex-end">
+        <Grid container >
           <Grid item>
             <Link
               component="button"
