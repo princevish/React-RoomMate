@@ -77,7 +77,7 @@ export default function Profile() {
       setroomState(allPosts.data);
       setLoad(false);
     } catch (err) {
-      console.log(err);
+     
     }
     return null;
   };
@@ -119,7 +119,7 @@ export default function Profile() {
         push("/signin");
       }
     } catch (err) {
-      console.log(err);
+     
     }
   };
   const roomdel = async (id) => {
@@ -135,7 +135,7 @@ export default function Profile() {
         }
       }
     } catch (err) {
-      console.log(err);
+     
     }
   };
   const Roomitem = (user) => {

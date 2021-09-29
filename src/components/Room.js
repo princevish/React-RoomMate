@@ -83,7 +83,7 @@ about Rooms/Flats/Houses which is available for Rent" />
           <Tab label="Room" icon={<HomeIcon />} {...a11yProps(0)} />
           <Tab label="Hostel" icon={<LocationCityIcon />} {...a11yProps(1)} />
           <Tab label="PG" icon={<AssignmentIndIcon />} {...a11yProps(2)} />
-          <Tab label="Patner" icon={<PeopleAltIcon />} {...a11yProps(3)} />
+          <Tab label="Partner" icon={<PeopleAltIcon />} {...a11yProps(3)} />
          
         </Tabs>
       </AppBar>

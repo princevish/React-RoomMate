@@ -5,6 +5,7 @@ import { Grid,Typography } from "@material-ui/core";
 import axiosInstance from "../axios";
 import { DiamonLoading } from "react-loadingg";
 import {Helmet} from "react-helmet";
+import { useHistory } from "react-router-dom";
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
@@ -20,7 +21,7 @@ const useStyles = makeStyles((theme) => ({
 export default function Favorite() {
   const [roomstate, setroomState] = useState(false);
   const [load, setLoad] = useState(true);
- 
+  const { push } = useHistory();
   const Fav = ({ items }) => {
     if(items.length !== 0){
     return items.map((item) => {
@@ -39,6 +40,33 @@ export default function Favorite() {
     );
     }
   };
+   
+  
+  React.useEffect(() => {
+    fetch(
+      "/api/auth",
+      {
+        method: "GET",
+        headers: {
+          Accept: "appllication/json",
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+      },
+      {}
+    )
+      .then(function (response) {
+        return response.json();
+      })
+      .then(function (data) {
+        if (!data.id) {
+          push("/signup");
+        }
+      });
+  }, [push]); 
+
+
+
 
   useEffect(() => {
     const roomdata = async (setroomState) => {
@@ -51,7 +79,7 @@ export default function Favorite() {
         }
        
       } catch (err) {
-        console.log(err);
+       
       }
     };
     roomdata(setroomState);

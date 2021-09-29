@@ -66,7 +66,7 @@ export default function Checkmail() {
         setOpen(true);
       }
     } catch (err) {
-      console.log(err);
+     
       const jsonData = JSON.parse(err.request.response);
         setfailed(jsonData.message);
         setOpen(true);

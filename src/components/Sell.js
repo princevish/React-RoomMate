@@ -168,7 +168,7 @@ export default function Sell() {
         }
       } catch (err) {
         setLoad(false);
-        console.log(err);
+       
       }
     }
   };

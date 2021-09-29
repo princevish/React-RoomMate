@@ -105,10 +105,10 @@ export default function Signup() {
             push("/");
           }
         } catch (err) {
-          console.log(err)
+         
           setLoad(false);
           const jsonData = JSON.parse(err.request.response);
-          console.log(jsonData.message)
+         
           if (jsonData.message) {
             if (jsonData.message[0].msg) {
               setfailed(jsonData.message[0].msg);

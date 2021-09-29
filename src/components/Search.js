@@ -12,6 +12,9 @@ import {
 } from "@material-ui/core";
 import { State, City } from "country-state-city";
 import {Helmet} from "react-helmet";
+
+
+
 const Roomdata = async (roomState, statevalue, cityvalue,setLoad) => {
   try {
     if (statevalue && cityvalue) {
@@ -33,7 +36,7 @@ const Roomdata = async (roomState, statevalue, cityvalue,setLoad) => {
       }
     }
   } catch (err) {
-    console.log(err);
+  
   }
 };
 
@@ -93,7 +96,7 @@ export default function Search() {
     }
   }, [cityvalue, statevalue]);
 
-  const handelchange = (e) => {
+  const handlechange = (e) => {
     setCategory("");
     setOnlyfor("")
     setCitycode(e.target.value);
@@ -109,7 +112,8 @@ export default function Search() {
     setLoad(true);
   };
   
-  const handelcategory = (e) => {
+  
+  const handlecategory = (e) => {
     let ar=[]
     setCategory(e.target.value);
     setRcategory([]);
@@ -126,7 +130,7 @@ export default function Search() {
         }
     }
   };
-const handelfor=(e) => {
+const handleFor=(e) => {
      let ar=[]
     setOnlyfor(e.target.value);
     setRonlyfor([]);
@@ -165,7 +169,7 @@ about Rooms/Flats/Houses which is available for Rent" />
         <FormControl fullWidth variant="outlined">
           <InputLabel>For</InputLabel>
 
-          <Select value={onlyfor} onChange={handelfor} label="For" defaultValue = "">
+          <Select value={onlyfor} onChange={handleFor} label="For" defaultValue = "">
           <MenuItem value="Boys">Boys</MenuItem>
                           <MenuItem value="Girls">Girls</MenuItem>
                           <MenuItem value="Boys & Girls">Boys & Girls</MenuItem>
@@ -178,7 +182,7 @@ about Rooms/Flats/Houses which is available for Rent" />
         <FormControl fullWidth variant="outlined">
           <InputLabel>Type</InputLabel>
 
-          <Select value={type} onChange={handelcategory} label="type" defaultValue = "">
+          <Select value={type} onChange={handlecategory} label="type" defaultValue = "">
                 <MenuItem value="Room">Room</MenuItem>
                 <MenuItem value="Hostel">Hostel</MenuItem>
                 <MenuItem value="PG">PG</MenuItem>
@@ -214,7 +218,7 @@ about Rooms/Flats/Houses which is available for Rent" />
         <FormControl fullWidth variant="outlined">
           <InputLabel>State</InputLabel>
 
-          <Select value={statevalue} onChange={handelchange} label="State" defaultValue = "">
+          <Select value={statevalue} onChange={handlechange} label="State" defaultValue = "">
             {cstate.map((item) => {
               return (
                 <MenuItem

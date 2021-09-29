@@ -65,7 +65,38 @@ export default function Item({ item,ridfun, rid }) {
   const [fav, setFav] = useState(false);
   const [uf, setUf] = useState("");
   const [share, setShare] = useState(false);
+  const [setuserid, setSetuserid] = useState(false);
   const { push } = useHistory();
+
+
+
+ 
+  React.useEffect(() => {
+    fetch(
+      "/api/auth",
+      {
+        method: "GET",
+        headers: {
+          Accept: "appllication/json",
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+      },
+      {}
+    )
+      .then(function (response) {
+        return response.json();
+      })
+      .then(function (data) {
+        
+        if (data.id) {
+          setSetuserid(true);
+        }else{
+          setSetuserid(false);
+        }
+      });
+  }, [push]); 
+
   const favtrue = (id, fs) => {
     return fs.includes(id);
   };
@@ -121,8 +152,8 @@ export default function Item({ item,ridfun, rid }) {
     <Card className={classes.card}>
       <CardHeader
         avatar={<Avatar aria-label="profile" alt={item.users.name} src={item.users.image}/>}
-        action={
-          rid ? (
+        action={setuserid &&
+          (rid ? (
             <IconButton
               aria-label="favorite"
               onClick={() => ridfun(item._id)}
@@ -140,7 +171,7 @@ export default function Item({ item,ridfun, rid }) {
                 <FavoriteBorderOutlinedIcon color="secondary" />
               )}
             </IconButton>
-          )
+          ))
         }
         title={item.name + ` (${item.reviews.length})`}
         subheader={`${item.address.city},${item.address.state}`}

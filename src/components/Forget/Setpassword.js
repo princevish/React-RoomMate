@@ -75,7 +75,7 @@ export default function Setpassword() {
           push("/signin");
         }
       } catch (err) {
-        console.log(err);
+       
         if (err.request.status === 403) {
           push("/notfound");
         }
@@ -101,7 +101,7 @@ export default function Setpassword() {
           setLoad(false);
         }
       } catch (err) {
-        console.log(err);
+       
         if (err.request.status === 403) {
           push("/notfound");
         }

@@ -33,7 +33,7 @@ export default function Rooms({type}) {
         setroomState(allPosts.data);
         setLoad(false);
       } catch (err) {
-        console.log(err);
+       
       }
     };
     roomdata(setroomState, roomnum, setLoad,type);

@@ -66,7 +66,7 @@ export default function Signin() {
         push("/");
       }
     } catch (err) {
-      console.log(err);
+     
       const jsonData = JSON.parse(err.request.response);
 
       if (jsonData.message[0].msg) {

@@ -74,7 +74,7 @@ const Chat = () => {
           setGetmsg(datares.data)
           setLoad(false)
         } catch (err) {
-          console.log(err)
+         
         }}
         data()
 
@@ -84,7 +84,7 @@ const Chat = () => {
 React.useEffect(()=>{
   socket = io(Serverurl, { transports: ['websocket'] });
   socket.on("connect", function () {
-    console.log("coonect");
+   
     socket.emit('join',{to:userid})
   });
   socket.on("online", async(data)=>{
@@ -114,7 +114,7 @@ React.useEffect(()=>{
   }).then(function (response) {
     return response.json();
   }).catch(error => {
-    console.log(error)
+   
   });;
  }
   return () => {
@@ -133,7 +133,7 @@ React.useEffect(()=>{
     const datares = await res.data;
     setUser(datares)
   } catch (err) {
-    console.log(err)
+   
   }}
   data()
 

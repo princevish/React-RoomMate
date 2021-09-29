@@ -153,10 +153,7 @@ export default function Roomview() {
           push("/signup");
         }
       });
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
-
- // const simulateCall = () =>{
-  //  window.open(`tel:${roomState.users.mobile}`, "_self");}
+  }, [push]); 
 
 
  const chatbox =async(id,rid)=>{
@@ -168,7 +165,7 @@ export default function Roomview() {
     push(`/chat/${id}`);
  
   } catch (err) {
-    console.log(err);
+   
   }
  }
  useEffect(() => {

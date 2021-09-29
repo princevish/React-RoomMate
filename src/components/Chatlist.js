@@ -49,7 +49,7 @@ const chatdata = async(id)=>{
             
             }
           } catch (err) {
-            console.log(err);
+           
         }
  
 
